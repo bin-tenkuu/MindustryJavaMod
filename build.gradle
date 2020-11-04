@@ -13,7 +13,7 @@ repositories{
 
 ext{
     //the build number that this mod is made for
-    mindustryVersion = 'v106'
+    mindustryVersion = 'v111'
     //version of SDK you will be using
     sdkVersion = '30'
     sdkRoot = System.getenv("ANDROID_HOME")
@@ -59,7 +59,7 @@ jar{
     }
 
     from(rootDir){
-        include "mod.hjson"
+        include "mod.json"
     }
 
     from("assets/"){
