@@ -1,0 +1,14 @@
+name:进攻返利Mod
+displayName:进攻返利mod
+description:'''
+[red]打开服务器获得更多操作[]
+击败敌对单位获得{0-波数*100}随机资源
+击毁敌对建筑获得100%建造资源
+增加:可设置波数,建造速度,掉落资源倍数
+整合:灭火,跳波,呼叫单位操作
+建筑:物品转换器,核心连接器
+'''
+author:bin
+main:com.TestMod
+version:1.7
+minGameVersion:112

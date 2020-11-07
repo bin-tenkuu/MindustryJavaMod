@@ -2,6 +2,7 @@ package com;
 
 import mindustry.Vars;
 import mindustry.content.UnitTypes;
+import mindustry.gen.Entityc;
 import mindustry.gen.Firec;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
@@ -15,46 +16,28 @@ import java.lang.reflect.Field;
  * @version 1.0.0
  */
 public class ModCommander {
-  public static void fire(String[] args, Player player) {
-    Groups.all.forEach(syncs -> {
-      if (syncs instanceof Firec) {
-        syncs.remove();
-      }
-    });
-    Tools.chat("[green]å…¨å›¾è¿…é€Ÿç­ç«[]");
+  public static void fire(String[] args) {
+    Groups.all.each(syncs -> syncs instanceof Firec, Entityc::remove);
+    Tools.chat("[green]È«Í¼Ñ¸ËÙÃğ»ğ[]");
   }
 
-  public static void runWave(String[] args, Player player) {
-    int n = 1;
-    try {
-      if (args.length == 1) {
-        n = Integer.parseInt(args[0]);
-      }
-    } catch (NumberFormatException numberFormatException) {
-      Tools.chat(("arg must be Int : %s"), args[0]);
-    }
-    for (; n > 0; n--) {
-      Vars.logic.runWave();
-    }
-  }
-
-  public static void waveSpacing(String[] args, Player player) {
+  public static void waveSpacing(String[] args) {
     try {
       if (args.length == 1) {
         Vars.state.rules.waveSpacing = Integer.parseInt(args[0]);
       }
-      Tools.chat("å½“å‰æ³¢æ•°é—´éš”: %s", Vars.state.rules.waveSpacing);
+      Tools.chat("µ±Ç°²¨Êı¼ä¸ô: %s", Vars.state.rules.waveSpacing);
     } catch (NumberFormatException numberFormatException) {
       Tools.chat(("arg must be Int : %s"), args[0]);
     }
   }
 
-  public static void buildSpeed(String[] args, Player player) {
+  public static void buildSpeed(String[] args) {
     try {
       if (args.length == 1) {
         Vars.state.rules.buildSpeedMultiplier = Integer.parseInt(args[0]);
       }
-      Tools.chat("å½“å‰å»ºé€ é€Ÿåº¦: %s", Vars.state.rules.buildSpeedMultiplier);
+      Tools.chat("µ±Ç°½¨ÔìËÙ¶È: %s", Vars.state.rules.buildSpeedMultiplier);
     } catch (NumberFormatException numberFormatException) {
       Tools.chat(("arg must be Int : %s"), args[0]);
     }
@@ -69,15 +52,15 @@ public class ModCommander {
           Unit unit = ((UnitType)o).create(player.team());
           unit.set(player);
           unit.add();
-          Tools.chat("å¬å”¤ %s æˆåŠŸ", ((UnitType)o).localizedName);
-        }else {
-          Tools.chat("å¬å”¤å¤±è´¥:å¯¹åº”å•ä½ç±»å‹é”™è¯¯");
+          Tools.chat("ÕÙ»½ %s ³É¹¦", ((UnitType)o).localizedName);
+        } else {
+          Tools.chat("ÕÙ»½Ê§°Ü:¶ÔÓ¦µ¥Î»ÀàĞÍ´íÎó");
         }
       } else {
-        Tools.chat("éœ€è¦å‚æ•°");
+        Tools.chat("ĞèÒª²ÎÊı");
       }
     } catch (NoSuchFieldException e) {
-      Tools.chat("å¯¹åº”å•ä½æœªæ‰¾åˆ°");
+      Tools.chat("¶ÔÓ¦µ¥Î»Î´ÕÒµ½");
     } catch (IllegalAccessException e) {
       Tools.chat(e.getLocalizedMessage());
     }

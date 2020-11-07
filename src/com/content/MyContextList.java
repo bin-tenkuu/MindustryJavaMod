@@ -1,12 +1,17 @@
 package com.content;
 
-import com.content.blocks.GambleMachine;
-import com.content.blocks.MyBlock;
+import com.content.blocks.CommendBlock;
+import com.content.blocks.ItemChange;
+import com.content.blocks.LinkCoreBlock;
+import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.ctype.ContentList;
+import mindustry.gen.Icon;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
+import mindustry.ui.Styles;
 import mindustry.world.Block;
+import mindustry.world.meta.BuildVisibility;
 
 /**
  * @author bin
@@ -14,31 +19,48 @@ import mindustry.world.Block;
  */
 @SuppressWarnings("unused")
 public class MyContextList implements ContentList {
-  public static Block MyBlockTest,
-     MyTest;
+  public static Block
+     Bin_Block1,
+     Bin_Block2,
+     Bin_Block3;
 
   @Override public void load() {
-    MyBlockTest = new MyBlock("MyBlockTest") {{
-      localizedName = "MyBlockTest";
-      requirements(Category.units, ItemStack.with(Items.copper, 1, Items.lead, 8));
-      hasItems = true;
-      craftTime = 1;
-      results = ItemStack.with(Items.copper, 1, Items.coal, 4);
-      size = 2;
-      health = 320;
-      consumes.items(new ItemStack(Items.copper, 1), new ItemStack(Items.lead, 8));
-    }};
-    MyTest = new GambleMachine("MyTest") {{
-      localizedName = "抽卡机";
-      description = "抽卡机,随机出货";
-      requirements(Category.units, ItemStack.with(Items.copper, 100));
-      hasItems = true;
-      craftTime = 1;
-      results = ItemStack.with(Items.copper, 50, Items.lead, 20, Items.thorium, 20, Items.surgeAlloy, 10);
-      size = 2;
-      health = 320;
-      itemCapacity = 100;
-      consumes.items(ItemStack.with(Items.copper, 10));
-    }};
+    Bin_Block1 = new ItemChange("Bin_Block1") {
+      {
+        this.localizedName = "等量转换器";
+        this.description = "输入物品,转换为等量的另一个物品";
+        this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+        this.size = 1;
+        this.health = 320;
+      }
+    };
+    Bin_Block2 = new LinkCoreBlock("Bin_Block2") {
+      {
+        this.localizedName = "量子核心连接器";
+        this.description = "通过量子通道与核心相连,同时装载了装卸器";
+        this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+        this.size = 1;
+        this.health = 320;
+      }
+    };
+    Bin_Block3 = new CommendBlock("Bin_Block3") {
+      {
+        this.localizedName = "跳波器";
+        this.description = "跳波器";
+        this.size = 2;
+        this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
+        commend = table -> {
+          table.button(Icon.upOpen, Styles.clearTransi, (() -> {
+            Vars.logic.skipWave();
+          })).size(50).tooltip("下一波");
+          table.button(Icon.warningSmall, Styles.clearTransi, (() -> {
+            for (int i = 0; i < 10; i++) {
+              Vars.logic.runWave();
+            }
+          })).size(50).tooltip("跳10波");
+        };
+      }
+    };
   }
+
 }

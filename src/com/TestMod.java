@@ -1,9 +1,14 @@
 package com;
 
+import arc.Core;
 import arc.Events;
+import arc.scene.actions.Actions;
+import arc.scene.event.Touchable;
+import arc.scene.ui.layout.Table;
 import arc.util.CommandHandler;
 import arc.util.Log;
 import com.content.MyContextList;
+import com.content.MyTechTreeList;
 import mindustry.Vars;
 import mindustry.core.Logic;
 import mindustry.core.NetClient;
@@ -13,8 +18,13 @@ import mindustry.gen.Player;
 import mindustry.gen.Unitc;
 import mindustry.mod.Mod;
 import mindustry.type.ItemStack;
+import mindustry.ui.ItemDisplay;
+import mindustry.ui.Styles;
 import mindustry.world.Block;
+import mindustry.world.meta.values.ItemListValue;
 import mindustry.world.modules.ItemModule;
+
+import java.util.Arrays;
 
 /**
  * @author bin
@@ -45,9 +55,7 @@ public class TestMod extends Mod {
     handler.register("fire", "全图迅速灭火", ModCommander::fire);
     handler.<Player>register("kill", "自杀", (args, player) -> player.unit().destroy());
     handler.register("killAll", "击杀全图单位", (args) -> Groups.unit.forEach(Unitc::destroy));
-    handler.register("runWave", "[Int]", "下一波,默认参数1", ModCommander::runWave);
-    handler.register("skipWave", "跳一波(置零计时器)", (args) -> Vars.logic.skipWave());
-    handler.<Player>register("gameOver", "立即结束", (args, player) -> Logic.gameOver(player.team()));
+    handler.<Player>register("gameOver", "立即结束", (args, player) -> Logic.updateGameOver(player.team()));
     handler.register("waveSpacing", "[Int]", "显示/设置波数间隔", ModCommander::waveSpacing);
     handler.register("buildSpeed", "[Int]", "显示/设置建造速度", ModCommander::buildSpeed);
     handler.<Player>register("setItemDrop", "[Int]", "显示/设置单位死亡掉落资源倍数,默认100", (args, player) -> {
@@ -70,25 +78,28 @@ public class TestMod extends Mod {
       if (items.length() == 0) {
         return;
       }
-      StringBuilder sb = new StringBuilder();
-      for (ItemStack itemStack : block.requirements) {
-        items.add(itemStack.item, itemStack.amount);
-        sb.append("  ")
-           .append(itemStack.item.localizedName)
-           .append(" : ")
-           .append(itemStack.amount);
-      }
-      chat(("击毁 %s 获得物资:%s"), block.localizedName, sb.toString());
+      items.add(Arrays.asList(block.requirements));
+      Table t = new Table(Styles.black3);
+      t.touchable = Touchable.disabled;
+      t.setPosition(e.tile.x, e.tile.y);
+      new ItemListValue(false, block.requirements).display(t);
+      t.actions(Actions.show(), Actions.delay(5, Actions.remove()));
+      t.pack();
+      Core.scene.add(t);
     }
   }
 
   private void unitDestroyEvent(EventType.UnitDestroyEvent e) {
     if (Vars.player.team().isEnemy(e.unit.team)) {
       ItemStack stack = Tools.getRandomItemStack(Vars.state.wave * times);
-      Vars.player.team().items().add(stack.item, stack.amount);
-      String s = stack.item.localizedName;
-      chat(("击败 %s 获得物资 %s : %d"), e.unit.type().localizedName, s, stack.amount);
-
+      Vars.player.core().items.add(stack.item, stack.amount);
+      Table t = new Table(Styles.black3);
+      t.touchable = Touchable.disabled;
+      t.setPosition(e.unit.x, e.unit.y);
+      t.add(new ItemDisplay(stack.item, stack.amount, false)).padRight(5.0F);
+      t.actions(Actions.show(), Actions.delay(5, Actions.remove()));
+      t.pack();
+      Core.scene.add(t);
     }
   }
 
@@ -100,6 +111,7 @@ public class TestMod extends Mod {
   public void loadContent() {
     Log.info("加载TestMod方块");
     new MyContextList().load();
+    new MyTechTreeList().load();
   }
 
 }
