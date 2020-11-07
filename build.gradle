@@ -17,11 +17,11 @@ ext{
     //version of SDK you will be using
     sdkVersion = '30'
     sdkRoot = System.getenv("ANDROID_HOME")
-    d8 = 'C:\\Users\\bin\\AppData\\Local\\Android\\Sdk\\build-tools\\30.0.2\\d8.bat'
     doExec = { cmd ->
         def proc = cmd.execute(null, new File("$buildDir/libs"))
         proc.waitForProcessOutput(System.out, System.err)
     }
+    d8 = "$sdkRoot\\build-tools\\30.0.2\\d8.bat"
 }
 
 //java 8 backwards compatibility flag
