@@ -1,16 +1,23 @@
 package com.content;
 
+import arc.scene.ui.layout.Table;
 import com.content.blocks.CommendBlock;
 import com.content.blocks.ItemChange;
 import com.content.blocks.LinkCoreBlock;
 import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.ctype.ContentList;
+import mindustry.gen.Building;
+import mindustry.gen.Entityc;
+import mindustry.gen.Firec;
+import mindustry.gen.Groups;
 import mindustry.gen.Icon;
+import mindustry.gen.Unit;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.ui.Styles;
 import mindustry.world.Block;
+import mindustry.world.blocks.ItemSelection;
 import mindustry.world.meta.BuildVisibility;
 
 /**
@@ -20,9 +27,7 @@ import mindustry.world.meta.BuildVisibility;
 @SuppressWarnings("unused")
 public class MyContextList implements ContentList {
   public static Block
-     Bin_Block1,
-     Bin_Block2,
-     Bin_Block3;
+     Bin_Block1, Bin_Block2, Bin_Block3, Bin_Block4;
 
   @Override public void load() {
     Bin_Block1 = new ItemChange("Bin_Block1") {
@@ -45,22 +50,45 @@ public class MyContextList implements ContentList {
     };
     Bin_Block3 = new CommendBlock("Bin_Block3") {
       {
-        this.localizedName = "跳波器";
-        this.description = "跳波器";
+        this.localizedName = "指令器";
+        this.description = "集成各种指令";
         this.size = 2;
         this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
-        commend = table -> {
-          table.button(Icon.upOpen, Styles.clearTransi, (() -> {
-            Vars.logic.skipWave();
-          })).size(50).tooltip("下一波");
-          table.button(Icon.warningSmall, Styles.clearTransi, (() -> {
-            for (int i = 0; i < 10; i++) {
-              Vars.logic.runWave();
-            }
-          })).size(50).tooltip("跳10波");
-        };
+        commend = MyContextList::display;
+      }
+    };
+    Bin_Block4 = new CommendBlock("Bin_Block4") {
+      {
+        this.localizedName = "召唤器";
+        this.description = "召唤指定单位";
+        this.size = 2;
+        this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
+
+        this.commend = (building, table) -> ItemSelection.buildTable(
+           table,
+           Vars.content.units(),
+           () -> null,
+           unitType -> {
+             Unit unit = unitType.create(building.team());
+             unit.set(building.x, building.y + 1);
+             unit.add();
+           }
+        );
       }
     };
   }
 
+  private static void display(Building building, Table table) {
+    table.button(Icon.upOpen, Styles.clearTransi, (() -> {
+      Vars.logic.skipWave();
+    })).size(50).tooltip("下一波");
+    table.button(Icon.warningSmall, Styles.clearTransi, (() -> {
+      for (int i = 0; i < 10; i++) {
+        Vars.logic.runWave();
+      }
+    })).size(50).tooltip("跳10波");
+    table.button(Icon.file, Styles.clearTransi, () -> {
+      Groups.all.each(syncs -> syncs instanceof Firec, Entityc::remove);
+    }).size(50).tooltip("快速灭火");
+  }
 }

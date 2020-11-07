@@ -4,14 +4,15 @@ import arc.scene.ui.layout.Table;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
-import mindustry.world.meta.StatValue;
+
+import java.util.function.BiConsumer;
 
 /**
  * @author bin
  * @version 1.0.0
  */
 public class CommendBlock extends Block {
-  public StatValue commend;
+  public BiConsumer<Building, Table> commend;
 
   public CommendBlock(String name) {
     super(name);
@@ -28,9 +29,12 @@ public class CommendBlock extends Block {
   }
 
   public class CommendBuild extends Building {
+    public CommendBuild() {
+    }
+
     @Override public void buildConfiguration(Table table) {
-      if (commend != null) {
-        commend.display(table);
+      if (CommendBlock.this.commend != null) {
+        CommendBlock.this.commend.accept(this, table);
       }
     }
 
