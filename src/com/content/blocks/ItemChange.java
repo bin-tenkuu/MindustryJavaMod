@@ -5,6 +5,7 @@ import arc.scene.ui.layout.Table;
 import arc.util.Eachable;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import com.Tools;
 import mindustry.Vars;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
@@ -12,7 +13,6 @@ import mindustry.type.Item;
 import mindustry.ui.Cicon;
 import mindustry.world.Block;
 import mindustry.world.Tile;
-import mindustry.world.blocks.ItemSelection;
 import mindustry.world.meta.BlockGroup;
 
 /**
@@ -83,7 +83,7 @@ public class ItemChange extends Block {
     }
 
     @Override public void buildConfiguration(Table table) {
-      ItemSelection.buildTable(table, Vars.content.items(), () -> this.outputItem, this::configure);
+      Tools.buildItemSelectTable(table, Vars.content.items(), () -> this.outputItem, this::configure);
     }
 
     @Override public boolean onConfigureTileTapped(Building other) {
