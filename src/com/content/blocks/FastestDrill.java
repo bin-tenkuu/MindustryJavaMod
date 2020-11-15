@@ -12,7 +12,6 @@ import mindustry.content.Items;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.Building;
-import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.ui.Bar;
@@ -60,9 +59,9 @@ public class FastestDrill extends Block {
   @Override public void setBars() {
     super.setBars();
     this.bars.add("drillspeed", (FastestDrillBuild e) -> new Bar(
-       () -> Core.bundle.format("bar.drillspeed", e.drilled ? 60 * e.timeScale() : "0"),
-       () -> Pal.ammo,
-       () -> 0
+        () -> Core.bundle.format("bar.drillspeed", e.drilled ? "60" : "0"),
+        () -> Pal.ammo,
+        () -> e.drilled ? 1 : 0
     ));
   }
 
@@ -87,7 +86,7 @@ public class FastestDrill extends Block {
     }
     this.countOre(tile);
     if (this.returnItem != null) {
-      float width = this.drawPlaceText(Core.bundle.format("bar.drillspeed", "¡Þ"), x, y, valid);
+      float width = this.drawPlaceText(Core.bundle.format("bar.drillspeed", "60"), x, y, valid);
       float dx = (float)(x * 8) + this.offset - width / 2.0F - 4.0F;
       float dy = (float)(y * 8) + this.offset + (float)(this.size * 8) / 2.0F + 5.0F;
       Draw.mixcol(Color.darkGray, 1.0F);
@@ -106,10 +105,10 @@ public class FastestDrill extends Block {
   @Override public void setStats() {
     super.setStats();
     this.stats.add(Stat.drillTier, new BlockFilterValue((b) ->
-       b instanceof Floor && ((Floor)b).itemDrop != null)
+        b instanceof Floor && ((Floor)b).itemDrop != null)
     );
     this.stats.add(Stat.drillSpeed, table -> {
-      table.add("¡Þ ");
+      table.add("60 ");
       table.add(StatUnit.itemsSecond.localized());
     });
   }

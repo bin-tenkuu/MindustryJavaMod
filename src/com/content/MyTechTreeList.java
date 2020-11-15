@@ -12,32 +12,36 @@ import java.util.function.Consumer;
  * @version 1.0.0
  */
 public class MyTechTreeList implements ContentList {
-  public static TechTree.TechNode root;
 
-  public static TechTree.TechNode node(
-     TechTree.TechNode parent,
-     UnlockableContent content,
-     @Nullable Consumer<TechTree.TechNode> children
+  public static void node(
+      TechTree.TechNode parent,
+      UnlockableContent content,
+      @Nullable Consumer<TechTree.TechNode> children
   ) {
     TechTree.TechNode node = new TechTree.TechNode(parent, content, content.researchRequirements());
     if (children != null) {
       children.accept(node);
     }
-    return node;
   }
 
-  public static TechTree.TechNode node(
-     TechTree.TechNode parent,
-     UnlockableContent content
+  public static void node(
+      TechTree.TechNode parent,
+      UnlockableContent content
   ) {
-    return node(parent, content, (t) -> {});
+    node(parent, content, null);
   }
 
   @Override public void load() {
-    root = node(TechTree.root, MyContextList.Bin_Block5, (t1) -> {
-      node(t1, MyContextList.Bin_Block2, (t2) -> {
-        node(t2, MyContextList.Bin_Block1);
+    node(TechTree.root, MyContextList.Bin_SourceDrill, (t1) -> {
+      node(t1, MyContextList.Bin_LinkCore, (t2) -> {
+        node(t2, MyContextList.Bin_LargeStorage, (t3) -> {
+          node(t2, MyContextList.Bin_LargeCore);
+//
+        });
+//        node(t2, MyContextList.Bin_ItemChange);
       });
+      node(t1, MyContextList.Bin_MapTurret);
+      node(t1, MyContextList.Bin_LiquidPower);
     });
   }
 }

@@ -11,7 +11,6 @@ import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
-import mindustry.entities.Units;
 import mindustry.ui.Cicon;
 import mindustry.ui.Styles;
 
@@ -28,6 +27,7 @@ public final class Tools {
 
   /**
    * 自动生成选择表
+   *
    * @param table 表
    * @param items 物品集合
    * @param holder 需要返回当前选择项以高亮

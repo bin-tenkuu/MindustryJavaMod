@@ -1,22 +1,16 @@
 package com;
 
-import arc.Core;
 import arc.Events;
-import arc.scene.actions.Actions;
-import arc.scene.event.Touchable;
-import arc.scene.ui.layout.Table;
 import arc.util.Log;
 import com.content.MyContextList;
 import com.content.MyTechTreeList;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.mod.Mod;
-import mindustry.ui.Styles;
+import mindustry.type.ItemStack;
 import mindustry.world.Block;
-import mindustry.world.meta.values.ItemListValue;
+import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.modules.ItemModule;
-
-import java.util.Arrays;
 
 /**
  * @author bin
@@ -31,6 +25,7 @@ public class TestMod extends Mod {
   public void init() {
     Log.info(("加载TestMod init"));
     Events.on(EventType.BlockDestroyEvent.class, this::blockDestroyEvent);
+    Log.info(("加载TestMod init完成"));
   }
 
   private void blockDestroyEvent(EventType.BlockDestroyEvent e) {
@@ -40,14 +35,21 @@ public class TestMod extends Mod {
       if (items.length() == 0) {
         return;
       }
-      items.add(Arrays.asList(block.requirements));
-      Table t = new Table(Styles.black3);
-      t.touchable = Touchable.disabled;
-      t.setPosition(e.tile.x, e.tile.y);
-      new ItemListValue(false, block.requirements).display(t);
-      t.actions(Actions.show(), Actions.delay(5, Actions.remove()));
-      t.pack();
-      Core.scene.add(t);
+      CoreBlock.CoreBuild core = Vars.player.team().core();
+      for (ItemStack stack : block.requirements) {
+        if (core.acceptItem(null, stack.item)) {
+          core.items.add(stack.item, stack.amount);
+        }
+      }
+//      items.add(Arrays.asList(block.requirements));
+
+//      Table t = new Table(Styles.black3);
+//      t.touchable = Touchable.disabled;
+//      t.setPosition(e.tile.x, e.tile.y);
+//      new LiquidListValue(false, block.requirements).display(t);
+//      t.actions(Actions.show(), Actions.delay(5, Actions.remove()));
+//      t.pack();
+//      Core.scene.add(t);
     }
   }
 
@@ -56,6 +58,7 @@ public class TestMod extends Mod {
     Log.info("加载TestMod方块");
     new MyContextList().load();
     new MyTechTreeList().load();
+    Log.info("加载TestMod方块完成");
   }
 
 }

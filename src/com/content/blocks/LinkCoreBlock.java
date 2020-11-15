@@ -31,7 +31,6 @@ public class LinkCoreBlock extends Block {
     this.solid = true;
     this.group = BlockGroup.transportation;
     this.configurable = true;
-    this.saveConfig = true;
     this.noUpdateDisabled = true;
     this.config(Item.class, (LinkCoreBuild tile, Item item) -> tile.outputItem = item);
     this.configClear((LinkCoreBuild tile) -> tile.outputItem = null);
@@ -46,6 +45,10 @@ public class LinkCoreBlock extends Block {
     Item item = ((LinkCoreBuild)tile.bc()).outputItem;
     return item == null ? 0 : item.color.rgba();
   }
+
+//  @Override public void drawPlace(int x, int y, int rotation, boolean valid) {
+//    super.drawPlace(x, y, rotation, valid);
+//  }
 
   @Override protected void initBuilding() {
     this.buildType = LinkCoreBuild::new;
@@ -70,9 +73,9 @@ public class LinkCoreBlock extends Block {
     }
 
     @Override public void updateTile() {
-      core = this.core();
+      this.core = this.core();
       if (this.outputItem != null) {
-        this.items = core.items;
+        this.items = this.core.items;
         this.dump(this.outputItem);
       }
     }
@@ -82,7 +85,7 @@ public class LinkCoreBlock extends Block {
     }
 
     @Override public boolean acceptItem(Building source, Item item) {
-      return this.core != null && this.outputItem != item;
+      return this.core != null && this.outputItem == null && !(source instanceof LinkCoreBuild);
     }
 
     @Override public void handleItem(Building source, Item item) {
