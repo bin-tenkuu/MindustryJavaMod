@@ -10,7 +10,7 @@ import com.content.blocks.FastestDrill;
 import com.content.blocks.ItemChange;
 import com.content.blocks.LinkCoreBlock;
 import com.content.blocks.MapTurret;
-import com.content.blocks.PowerDriver;
+import com.content.blocks.LiquidPowerDriver;
 import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -193,7 +193,7 @@ public class MyContextList implements ContentList {
         this.flags = EnumSet.of(BlockFlag.storage);
       }
     };
-    Bin_LiquidPower = new PowerDriver("Bin_LiquidPower") {
+    Bin_LiquidPower = new LiquidPowerDriver("Bin_LiquidPower") {
       {
         this.localizedName = "液体温差发电站";
         this.description = "使用液体间温度反应发电";
@@ -201,12 +201,12 @@ public class MyContextList implements ContentList {
         this.size = 3;
         this.liquidDuration = 1;
         this.liquidCapacity = 60;
-        this.powerProduction = 20;
+        this.powerProduction = 30;
         this.requirements(Category.power, ItemStack.with(Items.copper, 50));
         this.consumes.add(new ConsumeLiquids(new LiquidStack[]{
-            new LiquidStack(Liquids.water, 6),
-            new LiquidStack(Liquids.cryofluid, 3),
             new LiquidStack(Liquids.slag, 6),
+            new LiquidStack(Liquids.oil, 6),
+            new LiquidStack(Liquids.cryofluid, 3),
         }));
       }
     };

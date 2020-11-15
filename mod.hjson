@@ -3,9 +3,9 @@ displayName:进攻返利mod
 description:'''
 [red]打开服务器获得更多操作[]
 击毁敌对建筑获得100%建造资源
-建筑:物品转换器,核心连接器,跳波灭火器,单位召唤器,钻头,(响指)
+建筑:物品转换,核心连接,跳波灭火,单位召唤,液体发电,钻头,(响指)
 '''
 author:bin
 main:com.TestMod
-version:1.9
-minGameVersion:112
+version:2.0
+minGameVersion:110
