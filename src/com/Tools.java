@@ -9,8 +9,11 @@ import arc.scene.ui.ScrollPane;
 import arc.scene.ui.layout.Scl;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
+import com.interfaces.LogicStatement;
 import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
+import mindustry.gen.LogicIO;
+import mindustry.logic.LAssembler;
 import mindustry.ui.Cicon;
 import mindustry.ui.Styles;
 
@@ -18,9 +21,11 @@ import mindustry.ui.Styles;
  * @author bin
  */
 public final class Tools {
+  public static String ModName = "进攻返利mod";
+
 
   public static <T extends UnlockableContent> void buildItemSelectTable(
-     Table table, Seq<T> items, Prov<T> holder, Cons<T> changed
+      Table table, Seq<T> items, Prov<T> holder, Cons<T> changed
   ) {
     Tools.buildItemSelectTable(table, items, holder, changed, true);
   }
@@ -36,7 +41,7 @@ public final class Tools {
    * @param <T> 可解锁对象
    */
   public static <T extends UnlockableContent> void buildItemSelectTable(
-     Table table, Seq<T> items, Prov<T> holder, Cons<T> changed, boolean closeSelected
+      Table table, Seq<T> items, Prov<T> holder, Cons<T> changed, boolean closeSelected
   ) {
     ButtonGroup<ImageButton> group = new ButtonGroup<>();
     group.setMinCheckCount(0);
@@ -47,11 +52,11 @@ public final class Tools {
     for (T t : items) {
       if (t.unlockedNow()) {
         ImageButton button =
-           cont.button(new TextureRegionDrawable(t.icon(Cicon.small)), Styles.clearToggleTransi, 24.0F, () -> {
-             if (closeSelected) {
-               Vars.control.input.frag.config.hideConfig();
-             }
-           }).group(group).tooltip(t.localizedName).get();
+            cont.button(new TextureRegionDrawable(t.icon(Cicon.small)), Styles.clearToggleTransi, 24.0F, () -> {
+              if (closeSelected) {
+                Vars.control.input.frag.config.hideConfig();
+              }
+            }).group(group).tooltip(t.localizedName).get();
         button.changed(() -> changed.get(button.isChecked() ? t : null));
         button.update(() -> button.setChecked(holder.get() == t));
         if (i++ >= 3) {
@@ -71,4 +76,8 @@ public final class Tools {
     table.add(pane).maxHeight(Scl.scl(200.0F));
   }
 
+  public static void addLogicStatement(LogicStatement statement) {
+    LogicIO.allStatements.add(statement::create);
+    LAssembler.customParsers.put(statement.getID(), statement::read);
+  }
 }

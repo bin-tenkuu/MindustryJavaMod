@@ -165,10 +165,6 @@ public class FastestDrill extends Block {
     public FastestDrillBuild() {
     }
 
-    @Override public boolean shouldIdleSound() {
-      return this.efficiency() > 0.01F;
-    }
-
     @Override public void drawSelect() {
       if (this.dominantItem != null) {
         float size = FastestDrill.this.size * 4;

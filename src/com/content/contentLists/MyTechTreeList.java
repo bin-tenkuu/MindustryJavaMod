@@ -1,4 +1,4 @@
-package com.content;
+package com.content.contentLists;
 
 import arc.util.Nullable;
 import mindustry.content.TechTree;
@@ -35,13 +35,14 @@ public class MyTechTreeList implements ContentList {
     node(TechTree.root, MyContextList.Bin_SourceDrill, (t1) -> {
       node(t1, MyContextList.Bin_LinkCore, (t2) -> {
         node(t2, MyContextList.Bin_LargeStorage, (t3) -> {
-          node(t2, MyContextList.Bin_LargeCore);
+          node(t3, MyContextList.Bin_LargeCore);
 //
         });
 //        node(t2, MyContextList.Bin_ItemChange);
       });
       node(t1, MyContextList.Bin_MapTurret);
       node(t1, MyContextList.Bin_LiquidPower);
+//      node(t1, MyLogicList.Bin_ItemControlStatement);
     });
   }
 }

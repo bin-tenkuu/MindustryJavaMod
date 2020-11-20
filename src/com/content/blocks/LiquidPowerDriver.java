@@ -70,8 +70,8 @@ public class LiquidPowerDriver extends PowerGenerator {
       if (this.shouldConsume() && this.enabled) {
         if (this.timer(LiquidPowerDriver.this.timerFuel, LiquidPowerDriver.this.liquidDuration / this.timeScale())) {
           this.consume();
-          this.productionEfficiency = 1;
         }
+        this.productionEfficiency = 1;
       } else {
         this.productionEfficiency = 0;
       }

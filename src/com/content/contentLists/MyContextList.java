@@ -1,4 +1,4 @@
-package com.content;
+package com.content.contentLists;
 
 import arc.scene.ui.layout.Table;
 import arc.struct.EnumSet;
@@ -9,13 +9,12 @@ import com.content.blocks.CommendBlock;
 import com.content.blocks.FastestDrill;
 import com.content.blocks.ItemChange;
 import com.content.blocks.LinkCoreBlock;
-import com.content.blocks.MapTurret;
 import com.content.blocks.LiquidPowerDriver;
+import com.content.blocks.MapTurret;
 import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.ctype.ContentList;
-import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.Building;
 import mindustry.gen.Entityc;
 import mindustry.gen.Firec;
@@ -150,27 +149,7 @@ public class MyContextList implements ContentList {
         this.range = 480;
         this.size = 4;
         this.requirements(Category.turret, ItemStack.with(Items.copper, 50));
-        this.shootType = new BasicBulletType(0, 1000, "Bin_MapBullet") {
-          {
-
-            this.splashDamageRadius = 50;
-            this.splashDamage = 1000;
-            this.pierce = false;
-            this.collidesTiles = false;
-            this.collidesTeam = false;
-            this.collidesAir = true;
-            this.collides = false;
-            this.keepVelocity = false;
-            this.lifetime = 60;
-            this.drag = 0;
-            this.knockback = 0.5F;
-            this.hitSize = 1;
-            this.hittable = false;
-            this.hitSound = Sounds.explosion;
-            this.hitShake = 0.5F;
-            this.lightning = 5;
-          }
-        };
+        this.shootType = MyBulletList.Bin_Bullet1;
       }
     };
     Bin_LargeCore = new CoreBlock("Bin_LargeCore") {
@@ -199,14 +178,14 @@ public class MyContextList implements ContentList {
         this.description = "使用液体间温度反应发电";
         this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
         this.size = 3;
-        this.liquidDuration = 1;
-        this.liquidCapacity = 60;
-        this.powerProduction = 30;
+        this.liquidDuration = 2;
+        this.liquidCapacity = 30;
+        this.powerProduction = 50;
         this.requirements(Category.power, ItemStack.with(Items.copper, 50));
         this.consumes.add(new ConsumeLiquids(new LiquidStack[]{
-            new LiquidStack(Liquids.slag, 6),
-            new LiquidStack(Liquids.oil, 6),
-            new LiquidStack(Liquids.cryofluid, 3),
+            new LiquidStack(Liquids.slag, 3),
+//            new LiquidStack(Liquids.oil, 3),
+            new LiquidStack(Liquids.water, 3),
         }));
       }
     };

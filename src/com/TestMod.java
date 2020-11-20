@@ -2,8 +2,10 @@ package com;
 
 import arc.Events;
 import arc.util.Log;
-import com.content.MyContextList;
-import com.content.MyTechTreeList;
+import com.content.contentLists.MyBulletList;
+import com.content.contentLists.MyContextList;
+import com.content.contentLists.MyLogicList;
+import com.content.contentLists.MyTechTreeList;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.mod.Mod;
@@ -16,9 +18,11 @@ import mindustry.world.modules.ItemModule;
  * @author bin
  */
 public class TestMod extends Mod {
+  public static TestMod instance;
 
   public TestMod() {
     Log.info(("加载TestMod构造器"));
+    TestMod.instance = this;
   }
 
   @Override
@@ -47,7 +51,7 @@ public class TestMod extends Mod {
 //      t.touchable = Touchable.disabled;
 //      t.setPosition(e.tile.x, e.tile.y);
 //      new LiquidListValue(false, block.requirements).display(t);
-//      t.actions(Actions.show(), Actions.delay(5, Actions.remove()));
+//      t.actions(Actions.show(), Actions.delay(3), Actions.remove());
 //      t.pack();
 //      Core.scene.add(t);
     }
@@ -56,8 +60,15 @@ public class TestMod extends Mod {
   @Override
   public void loadContent() {
     Log.info("加载TestMod方块");
+
+    new MyLogicList().load();
+
+    new MyBulletList().load();
+
     new MyContextList().load();
+
     new MyTechTreeList().load();
+
     Log.info("加载TestMod方块完成");
   }
 

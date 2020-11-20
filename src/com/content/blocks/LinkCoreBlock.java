@@ -46,10 +46,6 @@ public class LinkCoreBlock extends Block {
     return item == null ? 0 : item.color.rgba();
   }
 
-//  @Override public void drawPlace(int x, int y, int rotation, boolean valid) {
-//    super.drawPlace(x, y, rotation, valid);
-//  }
-
   @Override protected void initBuilding() {
     this.buildType = LinkCoreBuild::new;
   }
