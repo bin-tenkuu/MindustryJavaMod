@@ -1,4 +1,4 @@
-package com.content.contentLists;
+package com.bin.content.contentLists;
 
 import arc.util.Nullable;
 import mindustry.content.TechTree;

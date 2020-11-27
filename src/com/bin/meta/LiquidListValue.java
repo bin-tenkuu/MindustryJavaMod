@@ -1,4 +1,4 @@
-package com.meta;
+package com.bin.meta;
 
 import arc.scene.ui.layout.Table;
 import mindustry.type.LiquidStack;

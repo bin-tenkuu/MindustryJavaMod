@@ -1,11 +1,11 @@
-package com.content.logics;
+package com.bin.content.logics;
 
 import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.scene.ui.TextField;
 import arc.scene.ui.layout.Table;
-import com.Tools;
-import com.interfaces.LogicStatement;
+import com.bin.Tools;
+import com.bin.interfaces.LogicStatement;
 import mindustry.Vars;
 import mindustry.gen.Building;
 import mindustry.gen.Icon;

@@ -1,8 +1,8 @@
-package com.content.contentLists;
+package com.bin.content.contentLists;
 
-import com.Tools;
-import com.content.logics.ItemFactoryStatement;
-import com.content.logics.SourceStatement;
+import com.bin.Tools;
+import com.bin.content.logics.ItemFactoryStatement;
+import com.bin.content.logics.SourceStatement;
 import mindustry.ctype.ContentList;
 
 /**

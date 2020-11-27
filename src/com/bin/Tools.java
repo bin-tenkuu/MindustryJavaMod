@@ -1,4 +1,4 @@
-package com;
+package com.bin;
 
 import arc.func.Cons;
 import arc.func.Prov;
@@ -9,7 +9,7 @@ import arc.scene.ui.ScrollPane;
 import arc.scene.ui.layout.Scl;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
-import com.interfaces.LogicStatement;
+import com.bin.interfaces.LogicStatement;
 import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
 import mindustry.gen.LogicIO;

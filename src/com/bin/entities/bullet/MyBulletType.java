@@ -1,10 +1,10 @@
-package com.entities.bullet;
+package com.bin.entities.bullet;
 
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import com.Tools;
+import com.bin.Tools;
 import mindustry.entities.bullet.BulletType;
 import mindustry.gen.Bullet;
 

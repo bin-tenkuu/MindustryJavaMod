@@ -1,4 +1,4 @@
-package com.content.blocks;
+package com.bin.content.blocks;
 
 import arc.scene.ui.layout.Table;
 import mindustry.gen.Building;

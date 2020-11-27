@@ -1,7 +1,7 @@
-package com.content.contentLists;
+package com.bin.content.contentLists;
 
 import arc.graphics.Color;
-import com.entities.bullet.MyBulletType;
+import com.bin.entities.bullet.MyBulletType;
 import mindustry.content.Fx;
 import mindustry.ctype.ContentList;
 import mindustry.entities.bullet.BasicBulletType;

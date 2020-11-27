@@ -4,9 +4,9 @@ description:'''
 [red]打开服务器获得更多操作[]
 击毁敌对建筑获得100%建造资源
 建筑:核弹,物品转换,核心连接,跳波灭火,单位召唤,液体发电,钻头,(响指)
-处理器指令:资源修改器
+处理器指令:源
 '''
 author:bin
-main:com.TestMod
+main:com.bin.TestMod
 version:2.1
 minGameVersion:110

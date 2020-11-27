@@ -1,4 +1,4 @@
-package com.content.logics;
+package com.bin.content.logics;
 
 import mindustry.logic.LExecutor;
 

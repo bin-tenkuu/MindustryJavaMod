@@ -1,16 +1,15 @@
-package com;
+package com.bin;
 
 import arc.Events;
 import arc.util.Log;
-import com.content.contentLists.MyBulletList;
-import com.content.contentLists.MyContextList;
-import com.content.contentLists.MyLogicList;
-import com.content.contentLists.MyTechTreeList;
-import com.ui.HelpDialog;
+import com.bin.content.contentLists.MyBulletList;
+import com.bin.content.contentLists.MyContextList;
+import com.bin.content.contentLists.MyLogicList;
+import com.bin.content.contentLists.MyTechTreeList;
+import com.bin.ui.HelpDialog;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Icon;
-import mindustry.mod.Mod;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.storage.CoreBlock;
@@ -19,7 +18,7 @@ import mindustry.world.modules.ItemModule;
 /**
  * @author bin
  */
-public class TestMod extends Mod {
+public class TestMod extends mindustry.mod.Mod {
   public static TestMod instance;
 
   public TestMod() {

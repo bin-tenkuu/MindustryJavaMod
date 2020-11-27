@@ -1,9 +1,9 @@
-package com.content.blocks;
+package com.bin.content.blocks;
 
 import arc.func.Prov;
 import arc.graphics.g2d.TextureRegion;
-import com.Tools;
-import com.interfaces.LogicStatement;
+import com.bin.Tools;
+import com.bin.interfaces.LogicStatement;
 import mindustry.ctype.ContentType;
 import mindustry.ctype.UnlockableContent;
 import mindustry.gen.Icon;

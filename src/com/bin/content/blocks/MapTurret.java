@@ -1,4 +1,4 @@
-package com.content.blocks;
+package com.bin.content.blocks;
 
 import mindustry.entities.bullet.BulletType;
 import mindustry.gen.Posc;

@@ -1,4 +1,4 @@
-package com.interfaces;
+package com.bin.interfaces;
 
 import mindustry.logic.LStatement;
 

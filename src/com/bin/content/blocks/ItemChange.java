@@ -1,11 +1,11 @@
-package com.content.blocks;
+package com.bin.content.blocks;
 
 import arc.graphics.g2d.Draw;
 import arc.scene.ui.layout.Table;
 import arc.util.Eachable;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import com.Tools;
+import com.bin.Tools;
 import mindustry.Vars;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;

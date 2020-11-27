@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package com.meta;
+package com.bin.meta;
 
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;

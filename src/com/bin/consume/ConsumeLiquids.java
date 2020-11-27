@@ -1,9 +1,9 @@
-package com.consume;
+package com.bin.consume;
 
 import arc.scene.ui.layout.Table;
 import arc.struct.Bits;
-import com.meta.LiquidImage;
-import com.meta.LiquidListValue;
+import com.bin.meta.LiquidImage;
+import com.bin.meta.LiquidListValue;
 import mindustry.gen.Building;
 import mindustry.type.LiquidStack;
 import mindustry.ui.Cicon;

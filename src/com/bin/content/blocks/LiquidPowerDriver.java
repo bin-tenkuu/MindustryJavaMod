@@ -1,11 +1,11 @@
-package com.content.blocks;
+package com.bin.content.blocks;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.scene.ui.layout.Table;
 import arc.struct.EnumSet;
-import com.consume.ConsumeLiquids;
-import com.meta.LiquidImage;
+import com.bin.meta.LiquidImage;
+import com.bin.consume.ConsumeLiquids;
 import mindustry.gen.Building;
 import mindustry.type.Liquid;
 import mindustry.type.LiquidStack;

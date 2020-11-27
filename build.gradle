@@ -13,7 +13,7 @@ repositories {
 
 ext {
     //the build number that this mod is made for
-    mindustryVersion = 'v114'
+    mindustryVersion = 'v116'
     //version of SDK you will be using
     sdkVersion = '30'
     sdkRoot = System.getenv("ANDROID_HOME")
@@ -85,10 +85,3 @@ task deploy(type: Jar) {
         }
     }
 }
-//copy() {
-//    CopySpec copySpec ->
-//        //from 是一个方法，指定拷贝的源文件/文件夹>file("app/build/output/apk") 是方法的参数
-//        from file("$buildDir/libs/${project.archivesBaseName}.jar")
-//        //into 是一个方法：指定拷贝的目的地>拷贝到根工程的output目录下
-//        into "C:\\Users\\bin\\AppData\\Roaming\\Mindustry\\mods"
-//}

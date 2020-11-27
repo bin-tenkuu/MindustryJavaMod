@@ -1,9 +1,9 @@
-package com.content.logics;
+package com.bin.content.logics;
 
 import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
 import arc.util.Interval;
-import com.interfaces.LogicStatement;
+import com.bin.interfaces.LogicStatement;
 import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.logic.LAssembler;

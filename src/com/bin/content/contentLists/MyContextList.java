@@ -1,16 +1,16 @@
-package com.content.contentLists;
+package com.bin.content.contentLists;
 
 import arc.scene.ui.layout.Table;
 import arc.struct.EnumSet;
 import arc.util.Time;
-import com.Tools;
-import com.consume.ConsumeLiquids;
-import com.content.blocks.CommendBlock;
-import com.content.blocks.FastestDrill;
-import com.content.blocks.ItemChange;
-import com.content.blocks.LinkCoreBlock;
-import com.content.blocks.LiquidPowerDriver;
-import com.content.blocks.MapTurret;
+import com.bin.Tools;
+import com.bin.content.blocks.CommendBlock;
+import com.bin.content.blocks.LinkCoreBlock;
+import com.bin.consume.ConsumeLiquids;
+import com.bin.content.blocks.FastestDrill;
+import com.bin.content.blocks.ItemChange;
+import com.bin.content.blocks.LiquidPowerDriver;
+import com.bin.content.blocks.MapTurret;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.Items;

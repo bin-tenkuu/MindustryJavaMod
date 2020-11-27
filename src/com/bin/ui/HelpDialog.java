@@ -1,4 +1,4 @@
-package com.ui;
+package com.bin.ui;
 
 import arc.scene.ui.Label;
 import arc.scene.ui.ScrollPane;
