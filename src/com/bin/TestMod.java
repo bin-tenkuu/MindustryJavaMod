@@ -6,8 +6,10 @@ import com.content.contentLists.MyBulletList;
 import com.content.contentLists.MyContextList;
 import com.content.contentLists.MyLogicList;
 import com.content.contentLists.MyTechTreeList;
+import com.ui.HelpDialog;
 import mindustry.Vars;
 import mindustry.game.EventType;
+import mindustry.gen.Icon;
 import mindustry.mod.Mod;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
@@ -28,7 +30,15 @@ public class TestMod extends Mod {
   @Override
   public void init() {
     Log.info(("加载TestMod init"));
+
     Events.on(EventType.BlockDestroyEvent.class, this::blockDestroyEvent);
+
+    Vars.ui.logic.buttons.button("help", Icon.bookOpen, () -> {
+      HelpDialog dialog = new HelpDialog("help");
+      dialog.cont.add("这是一个text");
+      dialog.show();
+    });
+
     Log.info(("加载TestMod init完成"));
   }
 
@@ -45,15 +55,6 @@ public class TestMod extends Mod {
           core.items.add(stack.item, stack.amount);
         }
       }
-//      items.add(Arrays.asList(block.requirements));
-
-//      Table t = new Table(Styles.black3);
-//      t.touchable = Touchable.disabled;
-//      t.setPosition(e.tile.x, e.tile.y);
-//      new LiquidListValue(false, block.requirements).display(t);
-//      t.actions(Actions.show(), Actions.delay(3), Actions.remove());
-//      t.pack();
-//      Core.scene.add(t);
     }
   }
 

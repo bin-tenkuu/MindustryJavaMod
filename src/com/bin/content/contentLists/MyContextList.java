@@ -12,6 +12,7 @@ import com.content.blocks.LinkCoreBlock;
 import com.content.blocks.LiquidPowerDriver;
 import com.content.blocks.MapTurret;
 import mindustry.Vars;
+import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.ctype.ContentList;
@@ -28,6 +29,7 @@ import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.ui.Styles;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.turrets.ChargeTurret;
 import mindustry.world.blocks.logic.SwitchBlock;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
@@ -49,7 +51,8 @@ public class MyContextList implements ContentList {
       Bin_MapTurret,
       Bin_LargeCore,
       Bin_LargeStorage,
-      Bin_LiquidPower;
+      Bin_LiquidPower,
+      Bin_LaserTurret;
 
   @Override public void load() {
     Bin_ItemChange = new ItemChange("Bin_ItemChange") {
@@ -187,6 +190,23 @@ public class MyContextList implements ContentList {
 //            new LiquidStack(Liquids.oil, 3),
             new LiquidStack(Liquids.water, 3),
         }));
+      }
+    };
+    Bin_LaserTurret = new ChargeTurret("Bin_LaserTurret") {
+      {
+        size = 2;
+        health = 3600;
+        shootSound = Sounds.laser;
+        ammoPerShot = 2;
+        range = 420;
+        liquidCapacity = 60;
+        inaccuracy = 0;
+        chargeTime = 30;
+        chargeEffect = Fx.lancerLaserCharge;
+        chargeBeginEffect = Fx.lancerLaserChargeBegin;
+        powerUse = 1;
+        requirements(Category.turret, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+        shootType = MyBulletList.Bin_Bullet2;
       }
     };
   }

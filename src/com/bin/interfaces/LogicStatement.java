@@ -11,7 +11,7 @@ public interface LogicStatement {
    * 返回指令ID
    * @return ID
    */
-  String getID();
+  String getId();
 
   /**
    * 创建 T 的新对象

@@ -51,12 +51,15 @@ public final class Tools {
 
     for (T t : items) {
       if (t.unlockedNow()) {
-        ImageButton button =
-            cont.button(new TextureRegionDrawable(t.icon(Cicon.small)), Styles.clearToggleTransi, 24.0F, () -> {
+        ImageButton button = cont.button(
+            new TextureRegionDrawable(t.icon(Cicon.small)),
+            Styles.clearToggleTransi,
+            24.0F, () -> {
               if (closeSelected) {
                 Vars.control.input.frag.config.hideConfig();
               }
-            }).group(group).tooltip(t.localizedName).get();
+            }
+        ).group(group).tooltip(t.localizedName).get();
         button.changed(() -> changed.get(button.isChecked() ? t : null));
         button.update(() -> button.setChecked(holder.get() == t));
         if (i++ >= 3) {
@@ -76,8 +79,23 @@ public final class Tools {
     table.add(pane).maxHeight(Scl.scl(200.0F));
   }
 
+  public static <T extends UnlockableContent> void buildItemImageSelectTable(
+      Table t, Seq<T> items, int rowItems, Cons<T> click
+  ) {
+    int c = 0;
+    for (T item : items) {
+      if (item.unlockedNow()) {
+        t.button(new TextureRegionDrawable(item.icon(Cicon.small)), Styles.cleari, () -> click.get(item)).size(40.0F);
+
+        if (++c % rowItems == 0) {
+          t.row();
+        }
+      }
+    }
+  }
+
   public static void addLogicStatement(LogicStatement statement) {
     LogicIO.allStatements.add(statement::create);
-    LAssembler.customParsers.put(statement.getID(), statement::read);
+    LAssembler.customParsers.put(statement.getId(), statement::read);
   }
 }

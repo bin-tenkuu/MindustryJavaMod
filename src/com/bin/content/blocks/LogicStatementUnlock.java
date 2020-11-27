@@ -26,13 +26,6 @@ public class LogicStatementUnlock extends UnlockableContent {
     this.statementProv = statementProv;
   }
 
-  @Override public void init() {
-    super.init();
-    if (this.unlocked()) {
-      this.onUnlock();
-    }
-  }
-
   @Override public void onUnlock() {
     Tools.addLogicStatement(this.statementProv.get());
   }
@@ -42,6 +35,6 @@ public class LogicStatementUnlock extends UnlockableContent {
   }
 
   @Override public ContentType getContentType() {
-    return ContentType.status;
+    return ContentType.error;
   }
 }

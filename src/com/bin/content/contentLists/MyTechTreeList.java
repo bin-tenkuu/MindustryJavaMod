@@ -38,6 +38,7 @@ public class MyTechTreeList implements ContentList {
           node(t3, MyContextList.Bin_LargeCore);
 //
         });
+        node(t2, MyContextList.Bin_LaserTurret);
 //        node(t2, MyContextList.Bin_ItemChange);
       });
       node(t1, MyContextList.Bin_MapTurret);
