@@ -3,7 +3,6 @@ package com.bin.content.contentLists;
 import arc.graphics.Color;
 import mindustry.content.Fx;
 import mindustry.ctype.ContentList;
-import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.LaserBoltBulletType;
 

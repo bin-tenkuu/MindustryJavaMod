@@ -9,12 +9,8 @@ import arc.scene.ui.ScrollPane;
 import arc.scene.ui.layout.Scl;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
-import com.bin.interfaces.LogicStatement;
 import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
-import mindustry.gen.LogicIO;
-import mindustry.logic.LAssembler;
-import mindustry.ui.Cicon;
 import mindustry.ui.Styles;
 
 /**
@@ -94,8 +90,4 @@ public final class Tools {
     }
   }
 
-  public static void addLogicStatement(LogicStatement statement) {
-    LogicIO.allStatements.add(statement::create);
-    LAssembler.customParsers.put(statement.getId(), statement::read);
-  }
 }
