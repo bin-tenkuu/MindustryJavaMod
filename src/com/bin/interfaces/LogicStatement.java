@@ -7,24 +7,25 @@ import mindustry.logic.LStatement;
  * @version 1.0.0
  */
 public interface LogicStatement {
-  /**
-   * ·µ»ØÖ¸ÁîID
-   * @return ID
-   */
-  String getId();
+    /**
+     * è¿”å›æŒ‡ä»¤ID
+     *
+     * @return ID
+     */
+    String getId();
 
-  /**
-   * ´´½¨ T µÄĞÂ¶ÔÏó
-   *
-   * @return T
-   */
-  LStatement create();
+    /**
+     * åˆ›å»º T çš„æ–°å¯¹è±¡
+     *
+     * @return T
+     */
+    LStatement create();
 
-  /**
-   * ¶ÁÈ¡²ÎÊıºó·µ»Ø T µÄĞÂ¶ÔÏó
-   *
-   * @param s ±£´æ²ÎÊı
-   * @return T
-   */
-  LStatement read(String[] s);
+    /**
+     * è¯»å–å‚æ•°åè¿”å› T çš„æ–°å¯¹è±¡
+     *
+     * @param s ä¿å­˜å‚æ•°
+     * @return T
+     */
+    LStatement read(String[] s);
 }

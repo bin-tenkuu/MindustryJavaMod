@@ -21,7 +21,7 @@ import mindustry.ui.Styles;
  * @author bin
  */
 public final class Tools {
-  public static String ModName = "½ø¹¥·µÀûmod";
+  public static String ModName = "è¿›æ”»è¿”åˆ©mod";
 
 
   public static <T extends UnlockableContent> void buildItemSelectTable(
@@ -31,14 +31,14 @@ public final class Tools {
   }
 
   /**
-   * ×Ô¶¯Éú³ÉÑ¡Ôñ±í
+   * è‡ªåŠ¨ç”Ÿæˆé€‰æ‹©è¡¨
    *
-   * @param table ±í
-   * @param items ÎïÆ·¼¯ºÏ
-   * @param holder ĞèÒª·µ»Øµ±Ç°Ñ¡ÔñÏîÒÔ¸ßÁÁ
-   * @param changed ¸Ä±äÊ±µ÷ÓÃ
-   * @param closeSelected Ñ¡Ôñºó×Ô¶¯¹Ø±ÕÁĞ±í
-   * @param <T> ¿É½âËø¶ÔÏó
+   * @param table è¡¨
+   * @param items ç‰©å“é›†åˆ
+   * @param holder éœ€è¦è¿”å›å½“å‰é€‰æ‹©é¡¹ä»¥é«˜äº®
+   * @param changed æ”¹å˜æ—¶è°ƒç”¨
+   * @param closeSelected é€‰æ‹©åè‡ªåŠ¨å…³é—­åˆ—è¡¨
+   * @param <T> å¯è§£é”å¯¹è±¡
    */
   public static <T extends UnlockableContent> void buildItemSelectTable(
       Table table, Seq<T> items, Prov<T> holder, Cons<T> changed, boolean closeSelected
@@ -52,7 +52,7 @@ public final class Tools {
     for (T t : items) {
       if (t.unlockedNow()) {
         ImageButton button = cont.button(
-            new TextureRegionDrawable(t.icon(Cicon.small)),
+            new TextureRegionDrawable(t.uiIcon),
             Styles.clearToggleTransi,
             24.0F, () -> {
               if (closeSelected) {
@@ -85,7 +85,7 @@ public final class Tools {
     int c = 0;
     for (T item : items) {
       if (item.unlockedNow()) {
-        t.button(new TextureRegionDrawable(item.icon(Cicon.small)), Styles.cleari, () -> click.get(item)).size(40.0F);
+        t.button(new TextureRegionDrawable(item.uiIcon), Styles.cleari, () -> click.get(item)).size(40.0F);
 
         if (++c % rowItems == 0) {
           t.row();

@@ -13,37 +13,35 @@ import java.util.function.Consumer;
  */
 public class MyTechTreeList implements ContentList {
 
-  public static void node(
-      TechTree.TechNode parent,
-      UnlockableContent content,
-      @Nullable Consumer<TechTree.TechNode> children
-  ) {
-    TechTree.TechNode node = new TechTree.TechNode(parent, content, content.researchRequirements());
-    if (children != null) {
-      children.accept(node);
+    public static void node(
+            TechTree.TechNode parent,
+            UnlockableContent content,
+            @Nullable Consumer<TechTree.TechNode> children
+    ) {
+        TechTree.TechNode node = new TechTree.TechNode(parent, content, content.researchRequirements());
+        if (children != null) {
+            children.accept(node);
+        }
     }
-  }
 
-  public static void node(
-      TechTree.TechNode parent,
-      UnlockableContent content
-  ) {
-    node(parent, content, null);
-  }
+    public static void node(TechTree.TechNode parent, UnlockableContent content) {
+        node(parent, content, null);
+    }
 
-  @Override public void load() {
-    node(TechTree.root, MyContextList.Bin_SourceDrill, (t1) -> {
-      node(t1, MyContextList.Bin_LinkCore, (t2) -> {
-        node(t2, MyContextList.Bin_LargeStorage, (t3) -> {
-          node(t3, MyContextList.Bin_LargeCore);
-//
-        });
-        node(t2, MyContextList.Bin_LaserTurret);
-//        node(t2, MyContextList.Bin_ItemChange);
-      });
-      node(t1, MyContextList.Bin_MapTurret);
-      node(t1, MyContextList.Bin_LiquidPower);
+
+    @Override
+    public void load() {
+        node(TechTree.root, MyContextList.Bin_SourceDrill, (t1) -> {
+            node(t1, MyContextList.Bin_LinkCore, (t2) -> {
+//                node(t2, MyContextList.Bin_LargeStorage, (t3) -> {
+//                    node(t3, MyContextList.Bin_LargeCore);
+//                });
+                node(t2, MyContextList.Bin_LaserTurret);
+                node(t2, MyContextList.Bin_ItemChange);
+            });
+//            node(t1, MyContextList.Bin_MapTurret);
+//            node(t1, MyContextList.Bin_LiquidPower);
 //      node(t1, MyLogicList.Bin_ItemControlStatement);
-    });
-  }
+        });
+    }
 }

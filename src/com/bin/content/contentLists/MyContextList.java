@@ -1,39 +1,24 @@
 package com.bin.content.contentLists;
 
 import arc.scene.ui.layout.Table;
-import arc.struct.EnumSet;
 import arc.util.Time;
 import com.bin.Tools;
 import com.bin.content.blocks.CommendBlock;
-import com.bin.content.blocks.LinkCoreBlock;
-import com.bin.consume.ConsumeLiquids;
 import com.bin.content.blocks.FastestDrill;
 import com.bin.content.blocks.ItemChange;
-import com.bin.content.blocks.LiquidPowerDriver;
-import com.bin.content.blocks.MapTurret;
+import com.bin.content.blocks.LinkCoreBlock;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.Items;
-import mindustry.content.Liquids;
 import mindustry.ctype.ContentList;
-import mindustry.gen.Building;
-import mindustry.gen.Entityc;
-import mindustry.gen.Firec;
-import mindustry.gen.Groups;
-import mindustry.gen.Icon;
-import mindustry.gen.Sounds;
-import mindustry.gen.Unit;
-import mindustry.gen.Unitc;
+import mindustry.gen.*;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
-import mindustry.type.LiquidStack;
 import mindustry.ui.Styles;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.turrets.ChargeTurret;
+import mindustry.world.blocks.defense.turrets.LaserTurret;
 import mindustry.world.blocks.logic.SwitchBlock;
 import mindustry.world.blocks.storage.CoreBlock;
-import mindustry.world.blocks.storage.StorageBlock;
-import mindustry.world.meta.BlockFlag;
 import mindustry.world.meta.BuildVisibility;
 
 /**
@@ -41,124 +26,116 @@ import mindustry.world.meta.BuildVisibility;
  * @version 1.0.0
  */
 public class MyContextList implements ContentList {
-  public static Block
-      Bin_ItemChange,
-      Bin_LinkCore,
-      Bin_Commend1,
-      Bin_CommendCall,
-      Bin_SourceDrill,
-      Bin_Block1,
-      Bin_MapTurret,
-      Bin_LargeCore,
-      Bin_LargeStorage,
-      Bin_LiquidPower,
-      Bin_LaserTurret;
+    public static Block
+            Bin_ItemChange,
+            Bin_LinkCore,
+            Bin_Commend1,
+            Bin_CommendCall,
+            Bin_SourceDrill,
+            Bin_Block1,
+            Bin_LaserTurret;
 
-  @Override public void load() {
-    Bin_ItemChange = new ItemChange("Bin_ItemChange") {
-      {
-        this.localizedName = "µÈÁ¿×ª»»Æ÷";
-        this.description = "ÊäÈëÎïÆ·,×ª»»ÎªµÈÁ¿µÄÁíÒ»¸öÎïÆ·";
-        this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with(Items.copper, 50));
-        this.size = 1;
-        this.health = 320;
-      }
-    };
-    Bin_LinkCore = new LinkCoreBlock("Bin_LinkCore") {
-      {
-        this.localizedName = "Á¿×ÓºËĞÄÁ¬½ÓÆ÷";
-        this.description = "Í¨¹ıÁ¿×ÓÍ¨µÀÓëºËĞÄÏàÁ¬,Í¬Ê±×°ÔØÁË×°Ğ¶Æ÷";
-        this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-        this.size = 1;
-        this.health = 320;
-      }
-    };
-    Bin_Commend1 = new CommendBlock("Bin_Commend1") {
-      {
-        this.localizedName = "Ö¸ÁîÆ÷";
-        this.description = "¼¯³É¸÷ÖÖÖ¸Áî";
-        this.size = 2;
-        this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
-        commend = MyContextList::display;
-      }
-    };
-    Bin_CommendCall = new CommendBlock("Bin_CommendCall") {
-      {
-        this.localizedName = "ÕÙ»½Æ÷";
-        this.description = "ÕÙ»½Ö¸¶¨µ¥Î»";
-        this.size = 2;
-        this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
-
-        this.commend = (building, table) -> Tools.buildItemSelectTable(
-            table,
-            Vars.content.units(),
-            () -> null,
-            unitType -> {
-              Unit unit = unitType.create(building.team());
-              unit.set(building.x, building.y + 1);
-              unit.add();
-            },
-            false
-        );
-      }
-    };
-    Bin_SourceDrill = new FastestDrill("Bin_SourceDrill") {
-      {
-        this.localizedName = "Á¿×Ó×êÍ·";
-        this.description = "[red]¼«ÏŞ²ú³ö,²»¿É¼ÓËÙ[]\n" +
-                           "[green]ÎÒÔÚ¶ÌÔİµÄ×êÍ·ÉúÑÄµ±ÖĞÑ§µ½ÁËÒ»¼şÊÂ," +
-                           "Ô½ÊÇÏëÒª×êµÄ¸ü¿ì,Ô½ÊÇ»áÊÜµ½¸÷ÖÖÏŞÖÆ," +
-                           "³ı·Ç³¬Ô½×êÍ·,ÎÒ²»×ö×êÍ·ÁË![]\n" +
-                           "(ÏÖÔÚ²ú³öËÙ¶ÈµÈÓÚÎïÆ·Ô´";
-        this.size = 2;
-        this.requirements(Category.production, BuildVisibility.shown, ItemStack.with(Items.copper, 20));
-      }
-    };
-    Bin_Block1 = new SwitchBlock("Bin_Block1") {
-      {
-        this.localizedName = "Ãğ°Ô¤ÎÏìÖ¸";
-        this.description = "Ëæ»úÏú»ÙÈ«Í¼Ô¼Ò»°ëµÄ½¨Öş\n" +
-                           "[red]ºËĞÄ[]³ıÍâ,[red]Ç½Óë´«ËÍ´ø[]ÓÉÓÚ¼¼ÊõÔ­Òò»ñÈ¡²»µ½,²»½øÈë¼ÆËã";
-        this.requirements(Category.logic, BuildVisibility.shown, ItemStack.with(Items.copper, 5));
-        this.size = 2;
-      }
-
-      @Override protected void initBuilding() {
-        this.buildType = () -> new SwitchBuild() {
-          @Override public boolean configTapped() {
-            this.kill();
-            Sounds.click.at(this);
-            Time.run(10, () -> {
-              boolean b = true;
-              for (int i = 0, n = 10; i < Groups.build.size(); i++) {
-                Building building = Groups.build.index(i);
-                if (building instanceof CoreBlock.CoreBuild) {
-                  continue;
-                }
-                if ((b = !b)) {
-                  Time.run(n++, building::kill);
-                }
-              }
-            });
-            return false;
-          }
+    @Override
+    public void load() {
+        Bin_ItemChange = new ItemChange("Bin_ItemChange") {
+            {
+                this.localizedName = "ç­‰é‡è½¬æ¢å™¨";
+                this.description = "è¾“å…¥ç‰©å“,è½¬æ¢ä¸ºç­‰é‡çš„å¦ä¸€ä¸ªç‰©å“";
+                this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with(Items.copper, 50));
+                this.size = 1;
+                this.health = 320;
+            }
         };
-      }
-    };
-    Bin_MapTurret = new MapTurret("Bin_MapTurret") {
-      {
-        this.localizedName = "ºËµ¯·¢Éä¾®";
-        this.description = "È«Í¼¹¥»÷,½ü¾àÀë";
-        this.range = 480;
-        this.size = 4;
-        this.requirements(Category.turret, ItemStack.with(Items.copper, 50));
-        this.shootType = MyBulletList.Bin_Bullet1;
-      }
-    };
+        Bin_LinkCore = new LinkCoreBlock("Bin_LinkCore") {
+            {
+                this.localizedName = "é‡å­æ ¸å¿ƒè¿æ¥å™¨";
+                this.description = "é€šè¿‡é‡å­é€šé“ä¸æ ¸å¿ƒç›¸è¿,åŒæ—¶è£…è½½äº†è£…å¸å™¨";
+                this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                this.size = 1;
+                this.health = 320;
+            }
+        };
+        Bin_Commend1 = new CommendBlock("Bin_Commend1") {
+            {
+                this.localizedName = "æŒ‡ä»¤å™¨";
+                this.description = "é›†æˆå„ç§æŒ‡ä»¤";
+                this.size = 2;
+                this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
+                commend = MyContextList::display;
+            }
+        };//*/
+        Bin_CommendCall = new CommendBlock("Bin_CommendCall") {
+            {
+                this.localizedName = "å¬å”¤å™¨";
+                this.description = "å¬å”¤æŒ‡å®šå•ä½";
+                this.size = 2;
+                this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
+
+                this.commend = (building, table) -> Tools.buildItemSelectTable(
+                        table,
+                        Vars.content.units(),
+                        () -> null,
+                        unitType -> {
+                            Unit unit = unitType.create(building.team());
+                            unit.set(building.x, building.y + 1);
+                            unit.add();
+                        },
+                        false
+                );
+            }
+        };
+        Bin_SourceDrill = new FastestDrill("Bin_SourceDrill") {
+            {
+                this.localizedName = "é‡å­é’»å¤´";
+                this.description = "[red]æé™äº§å‡º,ä¸å¯åŠ é€Ÿ[]\n" +
+                        "[green]æˆ‘åœ¨çŸ­æš‚çš„é’»å¤´ç”Ÿæ¶¯å½“ä¸­å­¦åˆ°äº†ä¸€ä»¶äº‹," +
+                        "è¶Šæ˜¯æƒ³è¦é’»çš„æ›´å¿«,è¶Šæ˜¯ä¼šå—åˆ°å„ç§é™åˆ¶," +
+                        "é™¤éè¶…è¶Šé’»å¤´,æˆ‘ä¸åšé’»å¤´äº†![]\n" +
+                        "(ç°åœ¨äº§å‡ºé€Ÿåº¦ç­‰äºç‰©å“æº";
+                this.size = 2;
+                this.requirements(Category.production, BuildVisibility.shown, ItemStack.with(Items.copper, 20));
+            }
+        };
+        Bin_Block1 = new SwitchBlock("Bin_Block1") {
+            {
+                this.localizedName = "ç­éœ¸ã®å“æŒ‡";
+                this.description = "éšæœºé”€æ¯å…¨å›¾çº¦ä¸€åŠçš„å»ºç­‘\n" +
+                        "[red]æ ¸å¿ƒ[]é™¤å¤–,[red]å¢™ä¸ä¼ é€å¸¦[]ç”±äºæŠ€æœ¯åŸå› è·å–ä¸åˆ°,ä¸è¿›å…¥è®¡ç®—";
+                this.requirements(Category.logic, BuildVisibility.shown, ItemStack.with(Items.copper, 5));
+                this.size = 2;
+            }
+
+            @Override
+            protected void initBuilding() {
+                this.buildType = () -> new SwitchBuild() {
+                    @Override
+                    public boolean configTapped() {
+                        this.kill();
+                        Sounds.click.at(this);
+                        Time.run(10, () -> {
+                            boolean b = true;
+                            for (int i = 0, n = 10; i < Groups.build.size(); i++) {
+                                Building building = Groups.build.index(i);
+                                if (building instanceof CoreBlock.CoreBuild) {
+                                    continue;
+                                }
+                                b = !b;
+                                if (b) {
+                                    Time.run(n++, building::kill);
+                                }
+                            }
+                        });
+                        return false;
+                    }
+                };
+            }
+        };
+
+    /*
     Bin_LargeCore = new CoreBlock("Bin_LargeCore") {
       {
-        this.localizedName = "´ÎÔªºËĞÄ";
-        this.description = "¸ßÇ¿¶ÈºËĞÄ,ÄÚÓĞ²Ö¿â";
+        this.localizedName = "æ¬¡å…ƒæ ¸å¿ƒ";
+        this.description = "é«˜å¼ºåº¦æ ¸å¿ƒ,å†…æœ‰ä»“åº“";
         this.size = 6;
         this.health = 10000;
         this.itemCapacity = 100000;
@@ -167,18 +144,20 @@ public class MyContextList implements ContentList {
     };
     Bin_LargeStorage = new StorageBlock("Bin_LargeStorage") {
       {
-        this.localizedName = "´ÎÔª²Ö¿â";
-        this.description = "¸ßÇ¿¶È²Ö¿â,ÄÚÓĞºËĞÄ";
+        this.localizedName = "æ¬¡å…ƒä»“åº“";
+        this.description = "é«˜å¼ºåº¦ä»“åº“,å†…æœ‰æ ¸å¿ƒ";
         this.requirements(Category.effect, ItemStack.with(Items.copper, 50));
         this.size = 4;
         this.itemCapacity = 10000;
         this.flags = EnumSet.of(BlockFlag.storage);
       }
     };
+    //*/
+    /*
     Bin_LiquidPower = new LiquidPowerDriver("Bin_LiquidPower") {
       {
-        this.localizedName = "ÒºÌåÎÂ²î·¢µçÕ¾";
-        this.description = "Ê¹ÓÃÒºÌå¼äÎÂ¶È·´Ó¦·¢µç";
+        this.localizedName = "æ¶²ä½“æ¸©å·®å‘ç”µç«™";
+        this.description = "ä½¿ç”¨æ¶²ä½“é—´æ¸©åº¦ååº”å‘ç”µ";
         this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
         this.size = 3;
         this.liquidDuration = 2;
@@ -192,38 +171,42 @@ public class MyContextList implements ContentList {
         }));
       }
     };
-    Bin_LaserTurret = new ChargeTurret("Bin_LaserTurret") {
-      {
-        size = 2;
-        health = 3600;
-        shootSound = Sounds.laser;
-        ammoPerShot = 2;
-        range = 420;
-        liquidCapacity = 60;
-        inaccuracy = 0;
-        chargeTime = 30;
-        chargeEffect = Fx.lancerLaserCharge;
-        chargeBeginEffect = Fx.lancerLaserChargeBegin;
-        powerUse = 1;
-        requirements(Category.turret, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-        shootType = MyBulletList.Bin_Bullet2;
-      }
-    };
-  }
+    //*/
+        Bin_LaserTurret = new LaserTurret("Bin_LaserTurret") {
+            {
+                size = 2;
+                health = 3600;
+                shootSound = Sounds.laser;
+                ammoPerShot = 2;
+                range = 420;
+                liquidCapacity = 60;
+                inaccuracy = 0;
+                chargeTime = 30;
+                chargeEffect = Fx.lancerLaserCharge;
+                chargeBeginEffect = Fx.lancerLaserChargeBegin;
+                powerUse = 1;
+                requirements(Category.turret, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                shootType = MyBulletList.Bin_Bullet2;
+            }
+        };
+    /*
+    Bin_CoreBase = new CoreBase("Bin_CoreBase");
+    //*/
+    }
 
-  private static void display(Building building, Table table) {
-    table.button(Icon.upOpen, Styles.clearTransi, (() -> Vars.logic.skipWave())).size(50).tooltip("ÏÂÒ»²¨");
-    table.button(Icon.warningSmall, Styles.clearTransi, (() -> {
-      for (int i = 0; i < 10; i++) {
-        Vars.logic.runWave();
-      }
-    })).size(50).tooltip("Ìø10²¨");
-    table.button(Icon.file, Styles.clearTransi, () ->
-        Groups.all.each(syncs -> syncs instanceof Firec, Entityc::remove)
-    ).size(50).tooltip("¿ìËÙÃğ»ğ");
-    table.button(Icon.cancel, Styles.clearTransi, () ->
-        Groups.unit.each(Unitc::destroy)
-    ).size(50).tooltip("Çå³ıËùÓĞµ¥Î»");
-    table.row();
-  }
+    private static void display(Building building, Table table) {
+        table.button(Icon.upOpen, Styles.clearTransi, (() -> Vars.logic.skipWave())).size(50).tooltip("ä¸‹ä¸€æ³¢");
+        table.button(Icon.warningSmall, Styles.clearTransi, (() -> {
+            for (int i = 0; i < 10; i++) {
+                Vars.logic.runWave();
+            }
+        })).size(50).tooltip("è·³10æ³¢");
+        table.button(Icon.file, Styles.clearTransi, () ->
+                Groups.all.each(syncs -> syncs instanceof Firec, Entityc::remove)
+        ).size(50).tooltip("å¿«é€Ÿç­ç«");
+        table.button(Icon.cancel, Styles.clearTransi, () ->
+                Groups.unit.each(Unitc::destroy)
+        ).size(50).tooltip("æ¸…é™¤æ‰€æœ‰å•ä½");
+        table.row();
+    }
 }
