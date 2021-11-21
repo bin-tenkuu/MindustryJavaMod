@@ -17,12 +17,12 @@ public class CoreBase extends CoreBlock {
 
     public CoreBase(String name) {
         super(name);
-        this.size = 2;
-        this.unitType = UnitTypes.poly;
-        this.health = 1000;
-        this.itemCapacity = 1000;
-        this.unitCapModifier = 0;
-        this.requirements(Category.effect, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+        size = 2;
+        unitType = UnitTypes.poly;
+        health = 1000;
+        itemCapacity = 1000;
+        unitCapModifier = 0;
+        requirements(Category.effect, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
     }
 
     @Override

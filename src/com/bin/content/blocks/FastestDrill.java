@@ -34,12 +34,12 @@ public class FastestDrill extends Block {
 
     public FastestDrill(String name) {
         super(name);
-        this.hasItems = true;
-        this.update = true;
-        this.solid = true;
-        this.group = BlockGroup.drills;
-        this.hasLiquids = false;
-        this.itemCapacity = 1;
+        hasItems = true;
+        update = true;
+        solid = true;
+        group = BlockGroup.drills;
+        hasLiquids = false;
+        itemCapacity = 1;
     }
 
     @Override
@@ -47,10 +47,10 @@ public class FastestDrill extends Block {
         if (req.worldContext) {
             Tile tile = req.tile();
             if (tile != null) {
-                this.countOre(req.tile());
-                if (this.returnItem != null) {
+                countOre(req.tile());
+                if (returnItem != null) {
                     Draw.color();
-                    Draw.rect(this.returnItem.uiIcon, req.drawx(), req.drawy());
+                    Draw.rect(returnItem.uiIcon, req.drawx(), req.drawy());
                 }
             }
         }
@@ -59,7 +59,7 @@ public class FastestDrill extends Block {
     @Override
     public void setBars() {
         super.setBars();
-        this.bars.add("drillspeed", (FastestDrillBuild e) -> new Bar(
+        bars.add("drillspeed", (FastestDrillBuild e) -> new Bar(
                 () -> Core.bundle.format("bar.drillspeed", e.drilled ? "60" : "0"),
                 () -> Pal.ammo,
                 () -> e.drilled ? 1 : 0
@@ -68,16 +68,16 @@ public class FastestDrill extends Block {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team) {
-        if (this.isMultiblock()) {
+        if (isMultiblock()) {
             Seq<Tile> tiles = tile.getLinkedTilesAs(this, tempTiles);
             for (Tile t : tiles) {
-                if (this.canMine(t)) {
+                if (canMine(t)) {
                     return true;
                 }
             }
             return false;
         } else {
-            return this.canMine(tile);
+            return canMine(tile);
         }
     }
 
@@ -87,20 +87,20 @@ public class FastestDrill extends Block {
         if (tile == null) {
             return;
         }
-        this.countOre(tile);
-        if (this.returnItem != null) {
-            float width = this.drawPlaceText(Core.bundle.format("bar.drillspeed", "60"), x, y, valid);
-            float dx = (float) (x * 8) + this.offset - width / 2.0F - 4.0F;
-            float dy = (float) (y * 8) + this.offset + (float) (this.size * 8) / 2.0F + 5.0F;
+        countOre(tile);
+        if (returnItem != null) {
+            float width = drawPlaceText(Core.bundle.format("bar.drillspeed", "60"), x, y, valid);
+            float dx = (float) (x * 8) + offset - width / 2.0F - 4.0F;
+            float dy = (float) (y * 8) + offset + (float) (size * 8) / 2.0F + 5.0F;
             Draw.mixcol(Color.darkGray, 1.0F);
-            Draw.rect(this.returnItem.uiIcon, dx, dy - 1.0F);
+            Draw.rect(returnItem.uiIcon, dx, dy - 1.0F);
             Draw.reset();
-            Draw.rect(this.returnItem.uiIcon, dx, dy);
+            Draw.rect(returnItem.uiIcon, dx, dy);
         } else {
             Tile to = tile.getLinkedTilesAs(this, tempTiles).find((t) -> false);
             Item item = to == null ? null : to.drop();
             if (item != null) {
-                this.drawPlaceText(Core.bundle.get("bar.drilltierreq"), x, y, valid);
+                drawPlaceText(Core.bundle.get("bar.drilltierreq"), x, y, valid);
             }
         }
     }
@@ -108,8 +108,8 @@ public class FastestDrill extends Block {
     @Override
     public void setStats() {
         super.setStats();
-        this.stats.add(Stat.drillTier, StatValues.blocks(b -> b instanceof Floor && b.itemDrop != null));
-        this.stats.add(Stat.drillSpeed, table -> {
+        stats.add(Stat.drillTier, StatValues.blocks(b -> b instanceof Floor && b.itemDrop != null));
+        stats.add(Stat.drillSpeed, table -> {
             table.add("60 ");
             table.add(StatUnit.itemsSecond.localized());
         });
@@ -117,35 +117,35 @@ public class FastestDrill extends Block {
 
     @Override
     public TextureRegion[] icons() {
-        return new TextureRegion[]{this.region};
+        return new TextureRegion[]{region};
     }
 
     private void countOre(Tile tile) {
-        this.returnItem = null;
-        this.oreCount.clear();
-        this.itemArray.clear();
+        returnItem = null;
+        oreCount.clear();
+        itemArray.clear();
 
         for (Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
-            if (this.canMine(other)) {
-                this.oreCount.increment(this.getDrop(other), 0, 1);
+            if (canMine(other)) {
+                oreCount.increment(getDrop(other), 0, 1);
             }
         }
 
-        for (Item item : this.oreCount.keys()) {
-            this.itemArray.add(item);
+        for (Item item : oreCount.keys()) {
+            itemArray.add(item);
         }
 
-        this.itemArray.sort((item1, item2) -> {
+        itemArray.sort((item1, item2) -> {
             int type = Boolean.compare(item1 != Items.sand, item2 != Items.sand);
             if (type != 0) {
                 return type;
             } else {
-                int amounts = Integer.compare(this.oreCount.get(item1, 0), this.oreCount.get(item2, 0));
+                int amounts = Integer.compare(oreCount.get(item1, 0), oreCount.get(item2, 0));
                 return amounts != 0 ? amounts : Integer.compare(item1.id, item2.id);
             }
         });
-        if (this.itemArray.size != 0) {
-            this.returnItem = this.itemArray.peek();
+        if (itemArray.size != 0) {
+            returnItem = itemArray.peek();
         }
     }
 
@@ -159,7 +159,7 @@ public class FastestDrill extends Block {
 
     @Override
     protected void initBuilding() {
-        this.buildType = FastestDrillBuild::new;
+        buildType = FastestDrillBuild::new;
     }
 
     public class FastestDrillBuild extends Building {
@@ -171,39 +171,39 @@ public class FastestDrill extends Block {
 
         @Override
         public void drawSelect() {
-            if (this.dominantItem != null) {
+            if (dominantItem != null) {
                 float size = FastestDrill.this.size * 4;
-                float dx = this.x - size;
-                float dy = this.y + size;
+                float dx = x - size;
+                float dy = y + size;
                 Draw.mixcol(Color.darkGray, 1.0F);
-                Draw.rect(this.dominantItem.uiIcon, dx, dy - 1.0F);
+                Draw.rect(dominantItem.uiIcon, dx, dy - 1.0F);
                 Draw.reset();
-                Draw.rect(this.dominantItem.uiIcon, dx, dy);
+                Draw.rect(dominantItem.uiIcon, dx, dy);
             }
         }
 
         @Override
         public void onProximityUpdate() {
-            FastestDrill.this.countOre(this.tile);
-            this.dominantItem = FastestDrill.this.returnItem;
+            countOre(tile);
+            dominantItem = returnItem;
         }
 
         @Override
         public boolean shouldConsume() {
-            return this.items.total() < this.block.itemCapacity;
+            return items.total() < block.itemCapacity;
         }
 
         @Override
         public void updateTile() {
-            if (this.dominantItem == null) {
+            if (dominantItem == null) {
                 return;
             }
-            this.dump(this.dominantItem);
-            if (this.cons.valid()) {
-                this.offload(this.dominantItem);
-                this.drilled = true;
+            dump(dominantItem);
+            if (cons.valid()) {
+                offload(dominantItem);
+                drilled = true;
             } else {
-                this.drilled = false;
+                drilled = false;
             }
         }
 
@@ -214,9 +214,9 @@ public class FastestDrill extends Block {
         @Override
         public void draw() {
             super.draw();
-            if (this.dominantItem != null) {
+            if (dominantItem != null) {
                 Draw.color();
-                Draw.rect(this.dominantItem.uiIcon, this.x, this.y);
+                Draw.rect(dominantItem.uiIcon, x, y);
             }
         }
     }

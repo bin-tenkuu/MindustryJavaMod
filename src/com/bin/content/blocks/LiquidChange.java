@@ -11,6 +11,7 @@ import mindustry.Vars;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.type.Item;
+import mindustry.type.Liquid;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockGroup;
@@ -18,25 +19,27 @@ import mindustry.world.meta.BlockGroup;
 /**
  * @author bin
  */
-public class ItemChange extends Block {
-    public ItemChange(String name) {
+public class LiquidChange extends Block {
+    public LiquidChange(String name) {
         super(name);
         hasItems = true;
+        hasLiquids = true;
         update = true;
         solid = true;
         group = BlockGroup.transportation;
         configurable = true;
         saveConfig = true;
         noUpdateDisabled = true;
-        config(Item.class, (Cons2<ItemChangeBuild, Item>) ItemChangeBuild::config);
-        configClear(ItemChangeBuild::configClear);
-        itemCapacity = 1;
+        config(Liquid.class, (Cons2<LiquidChangeBuild, Liquid>) LiquidChangeBuild::config);
+        configClear(LiquidChangeBuild::configClear);
+        itemCapacity = 100;
+        liquidCapacity = 100;
     }
 
     @Override
     public void setBars() {
         super.setBars();
-        bars.remove("items");
+        bars.remove("liquid");
     }
 
     @Override
@@ -46,22 +49,22 @@ public class ItemChange extends Block {
 
     @Override
     public boolean outputsItems() {
-        return true;
+        return false;
     }
 
     @Override
     public int minimapColor(Tile tile) {
-        Item item = ((ItemChangeBuild) tile.build).outputItem;
+        Liquid item = ((LiquidChangeBuild) tile.build).outputItem;
         return item == null ? 0 : item.color.rgba();
     }
 
     @Override
     protected void initBuilding() {
-        buildType = ItemChangeBuild::new;
+        buildType = LiquidChangeBuild::new;
     }
 
-    public static class ItemChangeBuild extends Building {
-        public void config(Item item) {
+    public static class LiquidChangeBuild extends Building {
+        public void config(Liquid item) {
             outputItem = item;
         }
 
@@ -69,9 +72,9 @@ public class ItemChange extends Block {
             outputItem = null;
         }
 
-        public Item outputItem;
+        public Liquid outputItem;
 
-        public ItemChangeBuild() {
+        public LiquidChangeBuild() {
         }
 
         @Override
@@ -87,9 +90,14 @@ public class ItemChange extends Block {
 
         @Override
         public void updateTile() {
-            if (items.any()) {
-                Item take = items.take();
-                offload(outputItem == null ? take : outputItem);
+            if (outputItem != null) {
+                if (items.any()) {
+                    items.take();
+                    liquids.reset(outputItem, block.liquidCapacity);
+                    dumpLiquid(outputItem,1);
+                }
+            } else {
+                liquids.clear();
             }
         }
 
@@ -100,7 +108,7 @@ public class ItemChange extends Block {
 
         @Override
         public void buildConfiguration(Table table) {
-            Tools.buildItemSelectTable(table, Vars.content.items(), () -> outputItem, this::configure);
+            Tools.buildItemSelectTable(table, Vars.content.liquids(), () -> outputItem, this::configure);
         }
 
         @Override
@@ -120,12 +128,17 @@ public class ItemChange extends Block {
         }
 
         @Override
-        public Item config() {
+        public boolean acceptLiquid(Building source, Liquid liquid) {
+            return false;
+        }
+
+        @Override
+        public Liquid config() {
             return outputItem;
         }
 
         @Override
-        public boolean canDump(Building to, Item item) {
+        public boolean canDumpLiquid(Building to, Liquid item) {
             return item.equals(outputItem);
         }
 
@@ -138,7 +151,7 @@ public class ItemChange extends Block {
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
-            outputItem = Vars.content.item(read.s());
+            outputItem = Vars.content.liquid(read.s());
         }
     }
 }

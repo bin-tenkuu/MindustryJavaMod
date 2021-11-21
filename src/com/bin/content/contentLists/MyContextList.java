@@ -1,5 +1,6 @@
 package com.bin.content.contentLists;
 
+import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import com.bin.Tools;
@@ -11,12 +12,13 @@ import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.ctype.ContentList;
+import mindustry.entities.bullet.LaserBoltBulletType;
 import mindustry.gen.*;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.ui.Styles;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.turrets.LaserTurret;
+import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.logic.SwitchBlock;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.BuildVisibility;
@@ -28,7 +30,8 @@ import mindustry.world.meta.BuildVisibility;
 public class MyContextList implements ContentList {
     public static Block
             Bin_ItemChange,
-            Bin_LinkCore,
+    //            Bin_LiquidChange,
+    Bin_LinkCore,
             Bin_Commend1,
             Bin_CommendCall,
             Bin_SourceDrill,
@@ -39,39 +42,49 @@ public class MyContextList implements ContentList {
     public void load() {
         Bin_ItemChange = new ItemChange("Bin_ItemChange") {
             {
-                this.localizedName = "等量转换器";
-                this.description = "输入物品,转换为等量的另一个物品";
-                this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with(Items.copper, 50));
-                this.size = 1;
-                this.health = 320;
+                localizedName = "等量转换器";
+                description = "输入物品,转换为等量的另一个物品";
+                requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                size = 1;
+                health = 320;
             }
         };
-        Bin_LinkCore = new LinkCoreBlock("Bin_LinkCore") {
+        /*
+        Bin_LiquidChange = new ItemChange("Bin_LiquidChange") {
             {
-                this.localizedName = "量子核心连接器";
-                this.description = "通过量子通道与核心相连,同时装载了装卸器";
+                this.localizedName = "液体转换器";
+                this.description = "输入物品,转换为另一个液体";
                 this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
                 this.size = 1;
                 this.health = 320;
             }
+        };//*/
+        Bin_LinkCore = new LinkCoreBlock("Bin_LinkCore") {
+            {
+                localizedName = "量子核心连接器";
+                description = "通过量子通道与核心相连,同时装载了装卸器";
+                requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                size = 1;
+                health = 320;
+            }
         };
         Bin_Commend1 = new CommendBlock("Bin_Commend1") {
             {
-                this.localizedName = "指令器";
-                this.description = "集成各种指令";
-                this.size = 2;
-                this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
+                localizedName = "指令器";
+                description = "集成各种指令";
+                size = 2;
+                requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
                 commend = MyContextList::display;
             }
         };//*/
         Bin_CommendCall = new CommendBlock("Bin_CommendCall") {
             {
-                this.localizedName = "召唤器";
-                this.description = "召唤指定单位";
-                this.size = 2;
-                this.requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
+                localizedName = "召唤器";
+                description = "召唤指定单位";
+                size = 2;
+                requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
 
-                this.commend = (building, table) -> Tools.buildItemSelectTable(
+                commend = (building, table) -> Tools.buildItemSelectTable(
                         table,
                         Vars.content.units(),
                         () -> null,
@@ -86,31 +99,31 @@ public class MyContextList implements ContentList {
         };
         Bin_SourceDrill = new FastestDrill("Bin_SourceDrill") {
             {
-                this.localizedName = "量子钻头";
-                this.description = "[red]极限产出,不可加速[]\n" +
+                localizedName = "量子钻头";
+                description = "[red]极限产出,不可加速[]\n" +
                         "[green]我在短暂的钻头生涯当中学到了一件事," +
                         "越是想要钻的更快,越是会受到各种限制," +
                         "除非超越钻头,我不做钻头了![]\n" +
                         "(现在产出速度等于物品源";
-                this.size = 2;
-                this.requirements(Category.production, BuildVisibility.shown, ItemStack.with(Items.copper, 20));
+                size = 2;
+                requirements(Category.production, BuildVisibility.shown, ItemStack.with(Items.copper, 20));
             }
         };
         Bin_Block1 = new SwitchBlock("Bin_Block1") {
             {
-                this.localizedName = "灭霸の响指";
-                this.description = "随机销毁全图约一半的建筑\n" +
+                localizedName = "灭霸の响指";
+                description = "随机销毁全图约一半的建筑\n" +
                         "[red]核心[]除外,[red]墙与传送带[]由于技术原因获取不到,不进入计算";
-                this.requirements(Category.logic, BuildVisibility.shown, ItemStack.with(Items.copper, 5));
-                this.size = 2;
+                requirements(Category.logic, BuildVisibility.shown, ItemStack.with(Items.copper, 5));
+                size = 2;
             }
 
             @Override
             protected void initBuilding() {
-                this.buildType = () -> new SwitchBuild() {
+                buildType = () -> new SwitchBuild() {
                     @Override
                     public boolean configTapped() {
-                        this.kill();
+                        kill();
                         Sounds.click.at(this);
                         Time.run(10, () -> {
                             boolean b = true;
@@ -172,11 +185,11 @@ public class MyContextList implements ContentList {
       }
     };
     //*/
-        Bin_LaserTurret = new LaserTurret("Bin_LaserTurret") {
+        Bin_LaserTurret = new PowerTurret("Bin_LaserTurret") {
             {
+                requirements(Category.turret, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
                 size = 2;
                 health = 3600;
-                shootSound = Sounds.laser;
                 ammoPerShot = 2;
                 range = 420;
                 liquidCapacity = 60;
@@ -185,8 +198,23 @@ public class MyContextList implements ContentList {
                 chargeEffect = Fx.lancerLaserCharge;
                 chargeBeginEffect = Fx.lancerLaserChargeBegin;
                 powerUse = 1;
-                requirements(Category.turret, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-                shootType = MyBulletList.Bin_Bullet2;
+                reloadTime = 30f;
+                shootSound = Sounds.laserbig;
+                loopSound = Sounds.beam;
+                loopSoundVolume = 2f;
+                shootType = new LaserBoltBulletType(5, 100) {{
+                    lifetime = 20;
+                    hitSize = 30;
+                    pierce = true;
+                    knockback = 0.1F;
+                    width = 30;
+                    height = 30;
+                    shootEffect = Fx.shootHeal;
+                    frontColor = Color.valueOf("00fff7");
+                    backColor = Color.valueOf("808080");
+                    splashDamage = 500;
+                    splashDamageRadius = 50;
+                }};
             }
         };
     /*

@@ -25,20 +25,20 @@ public class LinkCoreBlock extends Block {
 
     public LinkCoreBlock(String name) {
         super(name);
-        this.hasItems = true;
-        this.update = true;
-        this.solid = true;
-        this.group = BlockGroup.transportation;
-        this.configurable = true;
-        this.noUpdateDisabled = true;
-        this.config(Item.class, (LinkCoreBuild tile, Item item) -> tile.outputItem = item);
-        this.configClear((LinkCoreBuild tile) -> tile.outputItem = null);
+        hasItems = true;
+        update = true;
+        solid = true;
+        group = BlockGroup.transportation;
+        configurable = true;
+        noUpdateDisabled = true;
+        config(Item.class, (LinkCoreBuild tile, Item item) -> tile.outputItem = item);
+        configClear((LinkCoreBuild tile) -> tile.outputItem = null);
     }
 
     @Override
     public void setBars() {
         super.setBars();
-        this.bars.remove("items");
+        bars.remove("items");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class LinkCoreBlock extends Block {
 
     @Override
     protected void initBuilding() {
-        this.buildType = LinkCoreBuild::new;
+        buildType = LinkCoreBuild::new;
     }
 
     public static class LinkCoreBuild extends Building {
@@ -63,31 +63,34 @@ public class LinkCoreBlock extends Block {
         @Override
         public void draw() {
             super.draw();
-            if (this.outputItem == null) {
-                Draw.rect("cross", this.x, this.y);
+            if (outputItem == null) {
+                Draw.rect("cross", x, y);
             } else {
                 Draw.color();
-                Draw.rect(this.outputItem.uiIcon, this.x, this.y);
+                Draw.rect(outputItem.uiIcon, x, y);
             }
         }
 
         @Override
         public void updateTile() {
-            this.core = this.core();
-            if (this.outputItem != null && this.core != null) {
-                this.items = this.core.items;
-                this.dump(this.outputItem);
+            if (core == null) {
+                core = core();
+            }
+            if (outputItem != null && core != null) {
+                items = core.items;
+                dump(outputItem);
             }
         }
 
         @Override
         public void buildConfiguration(Table table) {
-            Tools.buildItemSelectTable(table, Vars.content.items(), () -> this.outputItem, this::configure);
+            Tools.buildItemSelectTable(table, Vars.content.items(), () -> outputItem, this::configure);
         }
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            return this.core != null && this.outputItem == null && !(source instanceof LinkCoreBuild);
+            return core != null && outputItem == null && !(source instanceof LinkCoreBuild) &&
+                    core.items.get(item) < core.getMaximumAccepted(item);
         }
 
         @Override
@@ -104,19 +107,19 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public Item config() {
-            return this.outputItem;
+            return outputItem;
         }
 
         @Override
         public void write(Writes write) {
             super.write(write);
-            write.s(this.outputItem == null ? -1 : this.outputItem.id);
+            write.s(outputItem == null ? -1 : outputItem.id);
         }
 
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
-            this.outputItem = Vars.content.item(read.s());
+            outputItem = Vars.content.item(read.s());
         }
     }
 }

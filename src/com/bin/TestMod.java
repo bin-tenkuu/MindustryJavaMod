@@ -1,7 +1,7 @@
 package com.bin;
 
+import arc.Events;
 import arc.util.Log;
-import com.bin.content.contentLists.MyBulletList;
 import com.bin.content.contentLists.MyContextList;
 import com.bin.content.contentLists.MyTechTreeList;
 import mindustry.Vars;
@@ -26,7 +26,7 @@ public class TestMod extends mindustry.mod.Mod {
     public void init() {
         Log.info(("加载TestMod init"));
 
-//        Events.on(EventType.BlockDestroyEvent.class, this::blockDestroyEvent);
+        Events.on(EventType.BlockDestroyEvent.class, this::blockDestroyEvent);
 
         Log.info(("加载TestMod init完成"));
     }
@@ -50,8 +50,6 @@ public class TestMod extends mindustry.mod.Mod {
     @Override
     public void loadContent() {
         Log.info("加载TestMod方块");
-
-        new MyBulletList().load();
 
         new MyContextList().load();
 

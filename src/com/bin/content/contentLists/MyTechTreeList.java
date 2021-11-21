@@ -1,6 +1,5 @@
 package com.bin.content.contentLists;
 
-import arc.util.Nullable;
 import mindustry.content.TechTree;
 import mindustry.ctype.ContentList;
 import mindustry.ctype.UnlockableContent;
@@ -12,22 +11,15 @@ import java.util.function.Consumer;
  * @version 1.0.0
  */
 public class MyTechTreeList implements ContentList {
-
     public static void node(
-            TechTree.TechNode parent,
-            UnlockableContent content,
-            @Nullable Consumer<TechTree.TechNode> children
+            TechTree.TechNode parent, UnlockableContent content, Consumer<TechTree.TechNode> children
     ) {
-        TechTree.TechNode node = new TechTree.TechNode(parent, content, content.researchRequirements());
-        if (children != null) {
-            children.accept(node);
-        }
+        children.accept(node(parent, content));
     }
 
-    public static void node(TechTree.TechNode parent, UnlockableContent content) {
-        node(parent, content, null);
+    public static TechTree.TechNode node(TechTree.TechNode parent, UnlockableContent content) {
+        return new TechTree.TechNode(parent, content, content.researchRequirements());
     }
-
 
     @Override
     public void load() {
@@ -38,10 +30,11 @@ public class MyTechTreeList implements ContentList {
 //                });
                 node(t2, MyContextList.Bin_LaserTurret);
                 node(t2, MyContextList.Bin_ItemChange);
+//                node(t2, MyContextList.Bin_LiquidChange);
             });
 //            node(t1, MyContextList.Bin_MapTurret);
 //            node(t1, MyContextList.Bin_LiquidPower);
-//      node(t1, MyLogicList.Bin_ItemControlStatement);
+//            node(t1, MyLogicList.Bin_ItemControlStatement);
         });
     }
 }

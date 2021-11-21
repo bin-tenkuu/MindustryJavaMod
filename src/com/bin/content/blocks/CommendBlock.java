@@ -16,17 +16,17 @@ public class CommendBlock extends Block {
 
     public CommendBlock(String name) {
         super(name);
-        this.hasItems = false;
-        this.update = true;
-        this.solid = false;
-        this.configurable = true;
-        this.group = BlockGroup.transportation;
-        this.alwaysUnlocked = true;
+        hasItems = false;
+        update = true;
+        solid = false;
+        configurable = true;
+        group = BlockGroup.transportation;
+        alwaysUnlocked = true;
     }
 
     @Override
     protected void initBuilding() {
-        this.buildType = CommendBuild::new;
+        buildType = CommendBuild::new;
     }
 
     public class CommendBuild extends Building {
@@ -35,16 +35,16 @@ public class CommendBlock extends Block {
 
         @Override
         public void buildConfiguration(Table table) {
-            if (CommendBlock.this.commend != null) {
-                CommendBlock.this.commend.accept(this, table);
+            if (commend != null) {
+                commend.accept(this, table);
             }
         }
 
         @Override
         public boolean onConfigureTileTapped(Building other) {
             if (this == other) {
-                this.deselect();
-                this.configure(null);
+                deselect();
+                configure(null);
                 return false;
             } else {
                 return true;
