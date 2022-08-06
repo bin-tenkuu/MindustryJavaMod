@@ -41,7 +41,7 @@ public class CommendBlock extends Block {
         }
 
         @Override
-        public boolean onConfigureTileTapped(Building other) {
+        public boolean onConfigureBuildTapped(Building other) {
             if (this == other) {
                 deselect();
                 configure(null);

@@ -7,6 +7,7 @@ import arc.graphics.g2d.TextureRegion;
 import arc.struct.ObjectIntMap;
 import arc.struct.Seq;
 import arc.util.Eachable;
+import com.bin.TestMod;
 import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.entities.units.BuildPlan;
@@ -18,6 +19,7 @@ import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
+import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
@@ -43,7 +45,7 @@ public class FastestDrill extends Block {
     }
 
     @Override
-    public void drawRequestConfigTop(BuildPlan req, Eachable<BuildPlan> list) {
+    public void drawPlanConfigTop(BuildPlan req, Eachable<BuildPlan> list) {
         if (req.worldContext) {
             Tile tile = req.tile();
             if (tile != null) {
@@ -59,7 +61,7 @@ public class FastestDrill extends Block {
     @Override
     public void setBars() {
         super.setBars();
-        bars.add("drillspeed", (FastestDrillBuild e) -> new Bar(
+       addBar("drillspeed", (FastestDrillBuild e) -> new Bar(
                 () -> Core.bundle.format("bar.drillspeed", e.drilled ? "60" : "0"),
                 () -> Pal.ammo,
                 () -> e.drilled ? 1 : 0
@@ -67,7 +69,7 @@ public class FastestDrill extends Block {
     }
 
     @Override
-    public boolean canPlaceOn(Tile tile, Team team) {
+    public boolean canPlaceOn(final Tile tile, final Team team, final int rotation) {
         if (isMultiblock()) {
             Seq<Tile> tiles = tile.getLinkedTilesAs(this, tempTiles);
             for (Tile t : tiles) {
@@ -190,7 +192,8 @@ public class FastestDrill extends Block {
 
         @Override
         public boolean shouldConsume() {
-            return items.total() < block.itemCapacity;
+            CoreBlock.CoreBuild core = TestMod.core;
+            return core != null && core.shouldConsume();
         }
 
         @Override
@@ -198,13 +201,33 @@ public class FastestDrill extends Block {
             if (dominantItem == null) {
                 return;
             }
-            dump(dominantItem);
-            if (cons.valid()) {
+            CoreBlock.CoreBuild core = TestMod.core;
+            if (core == null || !core.isAdded() || core.team != Vars.player.team()) {
+                TestMod.CACHE.exec();
+                return;
+            }
+            items = core.items;
+//            dump(dominantItem);
+            if (core.acceptItem(null, dominantItem)) {
+//                handleItem(this, dominantItem);
                 offload(dominantItem);
                 drilled = true;
             } else {
                 drilled = false;
             }
+        }
+
+        @Override
+        public void handleItem(final Building source, final Item item) {
+            if (acceptItem(null, item)) {
+                items.add(item, 1);
+            }
+        }
+
+        @Override
+        public boolean acceptItem(final Building source, final Item item) {
+            CoreBlock.CoreBuild core = TestMod.core;
+            return !(source instanceof FastestDrillBuild) && core != null && core.acceptItem(source, item);
         }
 
         @Override

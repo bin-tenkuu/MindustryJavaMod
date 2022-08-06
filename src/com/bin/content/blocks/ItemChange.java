@@ -36,12 +36,12 @@ public class ItemChange extends Block {
     @Override
     public void setBars() {
         super.setBars();
-        bars.remove("items");
+        barMap.remove("items");
     }
 
     @Override
-    public void drawRequestConfig(BuildPlan req, Eachable<BuildPlan> list) {
-        drawRequestConfigCenter(req, req.config, "center");
+    public void drawPlanConfig(BuildPlan req, Eachable<BuildPlan> list) {
+        drawPlanConfigCenter(req, req.config, "center");
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ItemChange extends Block {
         }
 
         @Override
-        public boolean onConfigureTileTapped(Building other) {
+        public boolean onConfigureBuildTapped(Building other) {
             if (this == other) {
                 deselect();
                 configure(null);
@@ -116,7 +116,7 @@ public class ItemChange extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            return items.total() < getMaximumAccepted(item);
+            return outputItem != item && items.total() < getMaximumAccepted(item);
         }
 
         @Override

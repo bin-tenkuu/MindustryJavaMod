@@ -49,10 +49,10 @@ public final class Tools {
       if (t.unlockedNow()) {
         ImageButton button = cont.button(
             new TextureRegionDrawable(t.uiIcon),
-            Styles.clearToggleTransi,
+            Styles.clearTogglei,
             24.0F, () -> {
               if (closeSelected) {
-                Vars.control.input.frag.config.hideConfig();
+                Vars.control.input.config.hideConfig();
               }
             }
         ).group(group).tooltip(t.localizedName).get();

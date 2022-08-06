@@ -4,15 +4,12 @@ import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import com.bin.Tools;
-import com.bin.content.blocks.CommendBlock;
-import com.bin.content.blocks.FastestDrill;
-import com.bin.content.blocks.ItemChange;
-import com.bin.content.blocks.LinkCoreBlock;
+import com.bin.content.blocks.*;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.Items;
-import mindustry.ctype.ContentList;
 import mindustry.entities.bullet.LaserBoltBulletType;
+import mindustry.entities.effect.MultiEffect;
 import mindustry.gen.*;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
@@ -27,18 +24,17 @@ import mindustry.world.meta.BuildVisibility;
  * @author bin
  * @version 1.0.0
  */
-public class MyContextList implements ContentList {
+public class MyContextList {
     public static Block
             Bin_ItemChange,
-    //            Bin_LiquidChange,
-    Bin_LinkCore,
+            Bin_LiquidChange,
+            Bin_LinkCore,
             Bin_Commend1,
             Bin_CommendCall,
             Bin_SourceDrill,
             Bin_Block1,
             Bin_LaserTurret;
 
-    @Override
     public void load() {
         Bin_ItemChange = new ItemChange("Bin_ItemChange") {
             {
@@ -49,16 +45,15 @@ public class MyContextList implements ContentList {
                 health = 320;
             }
         };
-        /*
-        Bin_LiquidChange = new ItemChange("Bin_LiquidChange") {
+        Bin_LiquidChange = new LiquidChange("Bin_LiquidChange") {
             {
-                this.localizedName = "液体转换器";
-                this.description = "输入物品,转换为另一个液体";
-                this.requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-                this.size = 1;
-                this.health = 320;
+                localizedName = "液体转换器";
+                description = "输入物品,转换为另一个液体";
+                requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                size = 1;
+                health = 320;
             }
-        };//*/
+        };
         Bin_LinkCore = new LinkCoreBlock("Bin_LinkCore") {
             {
                 localizedName = "量子核心连接器";
@@ -101,10 +96,8 @@ public class MyContextList implements ContentList {
             {
                 localizedName = "量子钻头";
                 description = "[red]极限产出,不可加速[]\n" +
-                        "[green]我在短暂的钻头生涯当中学到了一件事," +
-                        "越是想要钻的更快,越是会受到各种限制," +
-                        "除非超越钻头,我不做钻头了![]\n" +
-                        "(现在产出速度等于物品源";
+                        "[green]我在短暂的钻头生涯当中学到了一件事,越是想要钻的更快,越是会受到各种限制,除非超越钻头,我不做钻头了![]\n" +
+                        "(变相物品源";
                 size = 2;
                 requirements(Category.production, BuildVisibility.shown, ItemStack.with(Items.copper, 20));
             }
@@ -194,21 +187,21 @@ public class MyContextList implements ContentList {
                 range = 420;
                 liquidCapacity = 60;
                 inaccuracy = 0;
-                chargeTime = 30;
-                chargeEffect = Fx.lancerLaserCharge;
-                chargeBeginEffect = Fx.lancerLaserChargeBegin;
-                powerUse = 1;
-                reloadTime = 30f;
+                cooldownTime = 30;
+                shootEffect = Fx.lancerLaserShoot;
+                smokeEffect = Fx.none;
+                heatColor = Color.red;
+                consumePower(1);
+                reload = 30;
                 shootSound = Sounds.laserbig;
-                loopSound = Sounds.beam;
-                loopSoundVolume = 2f;
-                shootType = new LaserBoltBulletType(5, 100) {{
+                shootType = new LaserBoltBulletType(25, 100) {{
                     lifetime = 20;
                     hitSize = 30;
                     pierce = true;
                     knockback = 0.1F;
                     width = 30;
                     height = 30;
+                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
                     shootEffect = Fx.shootHeal;
                     frontColor = Color.valueOf("00fff7");
                     backColor = Color.valueOf("808080");
@@ -217,22 +210,19 @@ public class MyContextList implements ContentList {
                 }};
             }
         };
-    /*
-    Bin_CoreBase = new CoreBase("Bin_CoreBase");
-    //*/
     }
 
     private static void display(Building building, Table table) {
-        table.button(Icon.upOpen, Styles.clearTransi, (() -> Vars.logic.skipWave())).size(50).tooltip("下一波");
-        table.button(Icon.warningSmall, Styles.clearTransi, (() -> {
+        table.button(Icon.upOpen, Styles.clearNonei, (() -> Vars.logic.skipWave())).size(50).tooltip("下一波");
+        table.button("跳10波", Icon.warningSmall, Styles.cleart, (() -> {
             for (int i = 0; i < 10; i++) {
                 Vars.logic.runWave();
             }
-        })).size(50).tooltip("跳10波");
-        table.button(Icon.file, Styles.clearTransi, () ->
-                Groups.all.each(syncs -> syncs instanceof Firec, Entityc::remove)
+        })).size(50);
+        table.button(Icon.file, Styles.clearNonei, () ->
+                Groups.all.each(Firec.class::isInstance, Entityc::remove)
         ).size(50).tooltip("快速灭火");
-        table.button(Icon.cancel, Styles.clearTransi, () ->
+        table.button(Icon.cancel, Styles.clearNonei, () ->
                 Groups.unit.each(Unitc::destroy)
         ).size(50).tooltip("清除所有单位");
         table.row();

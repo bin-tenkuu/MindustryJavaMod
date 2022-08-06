@@ -9,12 +9,14 @@ import arc.graphics.g2d.Draw;
 import arc.scene.ui.layout.Table;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import com.bin.TestMod;
 import com.bin.Tools;
 import mindustry.Vars;
 import mindustry.gen.Building;
 import mindustry.type.Item;
 import mindustry.world.Block;
 import mindustry.world.Tile;
+import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
 import mindustry.world.meta.BlockGroup;
 
@@ -38,7 +40,7 @@ public class LinkCoreBlock extends Block {
     @Override
     public void setBars() {
         super.setBars();
-        bars.remove("items");
+        barMap.remove("items");
     }
 
     @Override
@@ -54,7 +56,6 @@ public class LinkCoreBlock extends Block {
 
     public static class LinkCoreBuild extends Building {
         public Item outputItem = null;
-        private Building core;
 
         public LinkCoreBuild() {
 
@@ -73,10 +74,11 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public void updateTile() {
-            if (core == null) {
-                core = core();
-            }
-            if (outputItem != null && core != null) {
+            if (outputItem != null) {
+                CoreBlock.CoreBuild core = TestMod.core;
+                if (core == null) {
+                    return;
+                }
                 items = core.items;
                 dump(outputItem);
             }
@@ -89,19 +91,18 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            return core != null && outputItem == null && !(source instanceof LinkCoreBuild) &&
-                    core.items.get(item) < core.getMaximumAccepted(item);
+            CoreBlock.CoreBuild core = TestMod.core;
+            return outputItem == null && !(source instanceof LinkCoreBuild) &&
+                    core != null && core.acceptItem(source, item);
         }
 
         @Override
         public void handleItem(Building source, Item item) {
-            if (core == null) {
-                return;
-            }
-            if (core.items.get(item) >= core.getMaximumAccepted(item)) {
-                StorageBlock.incinerateEffect(this, source);
-            } else {
+            CoreBlock.CoreBuild core = TestMod.core;
+            if (core.acceptItem(source, item)) {
                 core.items.add(item, 1);
+            } else {
+                StorageBlock.incinerateEffect(this, source);
             }
         }
 

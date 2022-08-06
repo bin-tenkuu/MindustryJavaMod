@@ -9,4 +9,4 @@ description:'''
 author:bin
 main:com.bin.TestMod
 version:2.2
-minGameVersion:110
+minGameVersion:136
