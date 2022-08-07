@@ -1,6 +1,7 @@
 package com.bin;
 
 import arc.Events;
+import arc.graphics.Color;
 import arc.util.Log;
 import com.bin.content.contentLists.MyContextList;
 import com.bin.content.contentLists.MyTechTreeList;
@@ -34,22 +35,14 @@ public class TestMod extends mindustry.mod.Mod {
     public void init() {
         Log.info(("加载TestMod init"));
 
-        Events.on(EventType.BlockDestroyEvent.class, this::blockDestroyEvent);
-        Events.on(EventType.WorldLoadEvent.class, e -> {
-            Rules rules = Vars.state.rules;
-            rules.coreIncinerates = true;
-            rules.lighting = true;
-            rules.staticFog = false;
-            rules.fog = false;
-            rules.showSpawns = true;
-            rules.coreCapture = true;
-        });
+        Events.on(EventType.BlockDestroyEvent.class, TestMod::blockDestroyEvent);
+        Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
         CACHE.start();
 
         Log.info(("加载TestMod init完成"));
     }
 
-    private void blockDestroyEvent(EventType.BlockDestroyEvent e) {
+    private static void blockDestroyEvent(EventType.BlockDestroyEvent e) {
         Team team = Vars.player.team();
         if (team.isEnemy(e.tile.team())) {
             Block block = e.tile.block();
@@ -64,6 +57,25 @@ public class TestMod extends mindustry.mod.Mod {
                 }
             }
         }
+    }
+
+    private static void changeRule(Object e) {
+        GameState state = Vars.state;
+        if (state == null) {
+            return;
+        }
+        Rules rules = state.rules;
+        if (rules == null) {
+            return;
+        }
+        rules.coreIncinerates = true;
+        rules.lighting = false;
+        rules.dynamicColor = Color.clear;
+        rules.staticColor = Color.clear;
+        rules.staticFog = false;
+        rules.fog = false;
+        rules.showSpawns = true;
+        rules.coreCapture = true;
     }
 
     @Override
@@ -108,21 +120,8 @@ public class TestMod extends mindustry.mod.Mod {
         public void run() {
             while (true) {
                 exec();
+                changeRule(null);
                 Thread.yield();
-                GameState state = Vars.state;
-                if (state == null) {
-                    continue;
-                }
-                Rules rules = state.rules;
-                if (rules == null) {
-                    continue;
-                }
-                rules.coreIncinerates = true;
-                rules.lighting = true;
-                rules.staticFog = false;
-                rules.fog = false;
-                rules.showSpawns = true;
-                rules.coreCapture = true;
             }
         }
     }
