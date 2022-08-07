@@ -6,7 +6,9 @@ import com.bin.content.contentLists.MyContextList;
 import com.bin.content.contentLists.MyTechTreeList;
 import mindustry.Vars;
 import mindustry.content.Blocks;
+import mindustry.core.GameState;
 import mindustry.game.EventType;
+import mindustry.game.Rules;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.type.ItemStack;
@@ -33,6 +35,15 @@ public class TestMod extends mindustry.mod.Mod {
         Log.info(("加载TestMod init"));
 
         Events.on(EventType.BlockDestroyEvent.class, this::blockDestroyEvent);
+        Events.on(EventType.WorldLoadEvent.class, e -> {
+            Rules rules = Vars.state.rules;
+            rules.coreIncinerates = true;
+            rules.lighting = true;
+            rules.staticFog = false;
+            rules.fog = false;
+            rules.showSpawns = true;
+            rules.coreCapture = true;
+        });
         CACHE.start();
 
         Log.info(("加载TestMod init完成"));
@@ -98,6 +109,20 @@ public class TestMod extends mindustry.mod.Mod {
             while (true) {
                 exec();
                 Thread.yield();
+                GameState state = Vars.state;
+                if (state == null) {
+                    continue;
+                }
+                Rules rules = state.rules;
+                if (rules == null) {
+                    continue;
+                }
+                rules.coreIncinerates = true;
+                rules.lighting = true;
+                rules.staticFog = false;
+                rules.fog = false;
+                rules.showSpawns = true;
+                rules.coreCapture = true;
             }
         }
     }
