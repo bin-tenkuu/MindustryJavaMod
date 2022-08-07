@@ -1,7 +1,6 @@
 package com.bin;
 
 import arc.Events;
-import arc.graphics.Color;
 import arc.util.Log;
 import com.bin.content.contentLists.MyContextList;
 import com.bin.content.contentLists.MyTechTreeList;
