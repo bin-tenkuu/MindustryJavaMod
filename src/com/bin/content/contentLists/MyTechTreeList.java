@@ -21,18 +21,8 @@ public class MyTechTreeList {
     }
 
     public void load() {
-        node(TechTree.roots.first(), MyContextList.Bin_SourceDrill, (t1) -> {
-            node(t1, MyContextList.Bin_LinkCore, (t2) -> {
-//                node(t2, MyContextList.Bin_LargeStorage, (t3) -> {
-//                    node(t3, MyContextList.Bin_LargeCore);
-//                });
-                node(t2, MyContextList.Bin_LaserTurret);
-                node(t2, MyContextList.Bin_ItemChange);
-                node(t2, MyContextList.Bin_LiquidChange);
-            });
-//            node(t1, MyContextList.Bin_MapTurret);
-//            node(t1, MyContextList.Bin_LiquidPower);
-//            node(t1, MyLogicList.Bin_ItemControlStatement);
+        node(TechTree.roots.first(), MyContextList.Bin_LinkCore, (t1) -> {
+            node(t1, MyContextList.Bin_LaserTurret);
         });
     }
 }

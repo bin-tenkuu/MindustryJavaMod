@@ -11,6 +11,7 @@ import mindustry.game.EventType;
 import mindustry.game.Rules;
 import mindustry.game.Team;
 import mindustry.game.Teams;
+import mindustry.gen.Player;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.storage.CoreBlock;
@@ -113,7 +114,18 @@ public class TestMod extends mindustry.mod.Mod {
         }
 
         public void exec() {
-            data = Vars.player.team().data();
+            Player player = Vars.player;
+            if (player == null) {
+                return;
+            }
+            Team team = player.team();
+            if (team == null) {
+                return;
+            }
+            data = team.data();
+            if (data == null) {
+                return;
+            }
             core = data.core();
         }
 

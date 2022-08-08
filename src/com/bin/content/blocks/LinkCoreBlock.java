@@ -99,7 +99,7 @@ public class LinkCoreBlock extends Block {
         @Override
         public void handleItem(Building source, Item item) {
             CoreBlock.CoreBuild core = TestMod.core;
-            if (core.acceptItem(source, item)) {
+            if (core != null && core.acceptItem(source, item)) {
                 core.items.add(item, 1);
             } else {
                 StorageBlock.incinerateEffect(this, source);
