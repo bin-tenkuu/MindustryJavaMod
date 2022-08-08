@@ -92,6 +92,10 @@ public class TestMod extends mindustry.mod.Mod {
             Blocks.liquidVoid.buildVisibility = BuildVisibility.shown;
             Blocks.payloadVoid.buildVisibility = BuildVisibility.shown;
             Blocks.powerVoid.buildVisibility = BuildVisibility.shown;
+            Blocks.worldProcessor.buildVisibility = BuildVisibility.shown;
+            Blocks.worldCell.buildVisibility = BuildVisibility.shown;
+            Blocks.radar.buildVisibility = BuildVisibility.shown;
+            Blocks.illuminator.buildVisibility = BuildVisibility.shown;
         }
 
         Vars.mods.getMod(TestMod.class).meta.hidden = true;
