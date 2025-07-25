@@ -18,13 +18,8 @@ import mindustry.world.modules.ItemModule;
 /**
  * @author bin
  */
+@SuppressWarnings("unused")
 public class TestMod extends mindustry.mod.Mod {
-    public static TestMod instance;
-
-    public TestMod() {
-        Log.info("加载TestMod构造器");
-        TestMod.instance = this;
-    }
 
     @Override
     public void init() {
