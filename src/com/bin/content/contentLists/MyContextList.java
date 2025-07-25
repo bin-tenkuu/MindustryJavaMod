@@ -1,23 +1,16 @@
 package com.bin.content.contentLists;
 
-import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
-import arc.util.Time;
 import com.bin.Tools;
-import com.bin.content.blocks.*;
+import com.bin.content.blocks.CommendBlock;
+import com.bin.content.blocks.LinkCoreBlock;
 import mindustry.Vars;
-import mindustry.content.Fx;
 import mindustry.content.Items;
-import mindustry.entities.bullet.LaserBoltBulletType;
-import mindustry.entities.effect.MultiEffect;
 import mindustry.gen.*;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.ui.Styles;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.turrets.PowerTurret;
-import mindustry.world.blocks.logic.SwitchBlock;
-import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.BuildVisibility;
 
 /**
@@ -29,10 +22,9 @@ public class MyContextList {
             Bin_LinkCore,
             Bin_Commend1,
             Bin_CommendCall,
-            Bin_Block1,
-            Bin_LaserTurret;
+            VOID;
 
-    public void load() {
+    public static void load() {
         Bin_LinkCore = new LinkCoreBlock("Bin_LinkCore") {
             {
                 localizedName = "量子核心连接器";
@@ -71,82 +63,17 @@ public class MyContextList {
                 );
             }
         };
-        Bin_Block1 = new SwitchBlock("Bin_Block1") {
-            {
-                localizedName = "灭霸の响指";
-                description = "随机销毁全图约一半的建筑\n" +
-                        "[red]核心[]除外,[red]墙与传送带[]由于技术原因获取不到,不进入计算";
-                requirements(Category.logic, BuildVisibility.shown, ItemStack.with(Items.copper, 5));
-                size = 2;
-            }
-
-            @Override
-            protected void initBuilding() {
-                buildType = () -> new SwitchBuild() {
-                    @Override
-                    public boolean configTapped() {
-                        kill();
-                        Sounds.click.at(this);
-                        Time.run(10, () -> {
-                            boolean b = true;
-                            for (int i = 0, n = 10; i < Groups.build.size(); i++) {
-                                Building building = Groups.build.index(i);
-                                if (building instanceof CoreBlock.CoreBuild) {
-                                    continue;
-                                }
-                                b = !b;
-                                if (b) {
-                                    Time.run(n++, building::kill);
-                                }
-                            }
-                        });
-                        return false;
-                    }
-                };
-            }
-        };
-
-        Bin_LaserTurret = new PowerTurret("Bin_LaserTurret") {
-            {
-                requirements(Category.turret, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-                size = 2;
-                health = 3600;
-                ammoPerShot = 2;
-                range = 420;
-                liquidCapacity = 60;
-                inaccuracy = 0;
-                cooldownTime = 30;
-                shootEffect = Fx.lancerLaserShoot;
-                smokeEffect = Fx.none;
-                heatColor = Color.red;
-                consumePower(1);
-                reload = 30;
-                shootSound = Sounds.laserbig;
-                shootType = new LaserBoltBulletType(25, 100) {{
-                    lifetime = 20;
-                    hitSize = 30;
-                    pierce = true;
-                    knockback = 0.1F;
-                    width = 30;
-                    height = 30;
-                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
-                    shootEffect = Fx.shootHeal;
-                    frontColor = Color.valueOf("00fff7");
-                    backColor = Color.valueOf("808080");
-                    splashDamage = 500;
-                    splashDamageRadius = 50;
-                }};
-            }
-        };
     }
 
     private static void display(Building building, Table table) {
-        table.button(Icon.upOpen, Styles.clearNonei, (() -> Vars.logic.skipWave())).size(50).tooltip("下一波");
-        table.button("跳10波", Icon.warningSmall, Styles.cleart, (() -> {
+        table.button(Icon.upOpen, Styles.clearNonei, () ->
+                Vars.logic.skipWave()
+        ).size(50).tooltip("下一波");
+        table.button("跳10波", Icon.warningSmall, Styles.cleart, () -> {
             for (int i = 0; i < 10; i++) {
                 Vars.logic.runWave();
             }
-        })).size(50);
+        }).size(50);
         table.button(Icon.file, Styles.clearNonei, () ->
                 Groups.all.each(Firec.class::isInstance, Entityc::remove)
         ).size(50).tooltip("快速灭火");

@@ -1,6 +1,5 @@
 package com.bin;
 
-import arc.Events;
 import arc.util.Log;
 import com.bin.content.contentLists.MyContextList;
 import com.bin.content.contentLists.MyTechTreeList;
@@ -10,8 +9,6 @@ import mindustry.core.GameState;
 import mindustry.game.EventType;
 import mindustry.game.Rules;
 import mindustry.game.Team;
-import mindustry.game.Teams;
-import mindustry.gen.Player;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.storage.CoreBlock;
@@ -23,28 +20,25 @@ import mindustry.world.modules.ItemModule;
  */
 public class TestMod extends mindustry.mod.Mod {
     public static TestMod instance;
-    public static CoreBlock.CoreBuild core;
-    public static Teams.TeamData data;
 
     public TestMod() {
-        Log.info(("加载TestMod构造器"));
+        Log.info("加载TestMod构造器");
         TestMod.instance = this;
     }
 
     @Override
     public void init() {
-        Log.info(("加载TestMod init"));
+        Log.info("加载TestMod init");
 
-        Events.on(EventType.BlockDestroyEvent.class, TestMod::blockDestroyEvent);
-        Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
-        CACHE.start();
+        // Events.on(EventType.BlockDestroyEvent.class, TestMod::blockDestroyEvent);
+        // Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
 
-        Log.info(("加载TestMod init完成"));
+        Log.info("加载TestMod init完成");
     }
 
     private static void blockDestroyEvent(EventType.BlockDestroyEvent e) {
         Team team = Vars.player.team();
-        if (team.isEnemy(e.tile.team())) {
+        if (team != e.tile.team()) {
             Block block = e.tile.block();
             ItemModule items = team.items();
             if (items.length() == 0) {
@@ -80,62 +74,25 @@ public class TestMod extends mindustry.mod.Mod {
     public void loadContent() {
         Log.info("加载TestMod方块");
 
-        new MyContextList().load();
+        MyContextList.load();
 
-        new MyTechTreeList().load();
+        MyTechTreeList.load();
 
-        {
-            Blocks.itemSource.buildVisibility = BuildVisibility.shown;
-            Blocks.liquidSource.buildVisibility = BuildVisibility.shown;
-            Blocks.payloadSource.buildVisibility = BuildVisibility.shown;
-            Blocks.powerSource.buildVisibility = BuildVisibility.shown;
-            Blocks.itemVoid.buildVisibility = BuildVisibility.shown;
-            Blocks.liquidVoid.buildVisibility = BuildVisibility.shown;
-            Blocks.payloadVoid.buildVisibility = BuildVisibility.shown;
-            Blocks.powerVoid.buildVisibility = BuildVisibility.shown;
-            Blocks.worldProcessor.buildVisibility = BuildVisibility.shown;
-            Blocks.worldCell.buildVisibility = BuildVisibility.shown;
-            Blocks.radar.buildVisibility = BuildVisibility.shown;
-            Blocks.illuminator.buildVisibility = BuildVisibility.shown;
-        }
+        Blocks.powerSource.buildVisibility = BuildVisibility.shown;
+        Blocks.powerVoid.buildVisibility = BuildVisibility.shown;
+        Blocks.itemSource.buildVisibility = BuildVisibility.shown;
+        Blocks.itemVoid.buildVisibility = BuildVisibility.shown;
+        Blocks.liquidSource.buildVisibility = BuildVisibility.shown;
+        Blocks.liquidVoid.buildVisibility = BuildVisibility.shown;
+        Blocks.payloadSource.buildVisibility = BuildVisibility.shown;
+        Blocks.payloadVoid.buildVisibility = BuildVisibility.shown;
+        Blocks.illuminator.buildVisibility = BuildVisibility.shown;
+        Blocks.heatSource.buildVisibility = BuildVisibility.shown;
 
         Vars.mods.getMod(TestMod.class).meta.hidden = true;
 
         Log.info("加载TestMod方块完成");
     }
 
-    @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
-    public static final TestModThread CACHE = new TestModThread();
 
-    public static class TestModThread extends Thread {
-        public TestModThread() {
-            super("TestMod.cache");
-            setDaemon(true);
-        }
-
-        public void exec() {
-            Player player = Vars.player;
-            if (player == null) {
-                return;
-            }
-            Team team = player.team();
-            if (team == null) {
-                return;
-            }
-            data = team.data();
-            if (data == null) {
-                return;
-            }
-            core = data.core();
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                exec();
-                changeRule(null);
-                Thread.yield();
-            }
-        }
-    }
 }
