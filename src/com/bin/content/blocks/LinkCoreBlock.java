@@ -9,10 +9,10 @@ import arc.graphics.g2d.Draw;
 import arc.scene.ui.layout.Table;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import com.bin.TestMod;
 import com.bin.Tools;
 import mindustry.Vars;
 import mindustry.gen.Building;
+import mindustry.gen.Teamc;
 import mindustry.type.Item;
 import mindustry.world.Block;
 import mindustry.world.Tile;
@@ -56,6 +56,7 @@ public class LinkCoreBlock extends Block {
 
     public static class LinkCoreBuild extends Building {
         public Item outputItem = null;
+        private CoreBlock.CoreBuild core;
 
         public LinkCoreBuild() {
 
@@ -74,14 +75,37 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public void updateTile() {
-            if (outputItem != null) {
-                CoreBlock.CoreBuild core = TestMod.core;
-                if (core == null) {
-                    return;
-                }
-                items = core.items;
-                dump(outputItem);
+            if (outputItem == null) {
+                return;
             }
+            core = team.core();
+            if (core == null) {
+                return;
+            }
+            items = core.items;
+            dump(outputItem);
+        }
+
+        public boolean dump(Item todump) {
+            if (todump == null) {
+                return false;
+            }
+            if (this.proximity.size != 0 && core.items.has(todump)) {
+                int dump = this.cdump;
+                for (int i = 0; i < this.proximity.size; ++i) {
+                    Building other = this.proximity.get((i + dump) % this.proximity.size);
+                    if (other.acceptItem(this, todump) && this.canDump(other, todump)) {
+                        other.handleItem(this, todump);
+                        core.removeStack(outputItem, -1);
+                        this.incrementDump(this.proximity.size);
+                        return true;
+                    }
+
+                    this.incrementDump(this.proximity.size);
+                }
+
+            }
+            return false;
         }
 
         @Override
@@ -91,18 +115,33 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            CoreBlock.CoreBuild core = TestMod.core;
             return outputItem == null && !(source instanceof LinkCoreBuild) &&
-                    core != null && core.acceptItem(source, item);
+                   core != null && core.acceptItem(source, item);
+        }
+
+        public int acceptStack(Item item, int amount, Teamc source) {
+            return core == null ? 0 : core.acceptStack(item, amount, source);
+        }
+
+        public int removeStack(Item item, int amount) {
+            return core == null ? 0 : core.removeStack(item, amount);
         }
 
         @Override
         public void handleItem(Building source, Item item) {
-            CoreBlock.CoreBuild core = TestMod.core;
-            if (core != null && core.acceptItem(source, item)) {
-                core.items.add(item, 1);
+            if (core == null) {
+                return;
+            }
+            if (core.acceptItem(source, item)) {
+                items.add(item, 1);
             } else {
                 StorageBlock.incinerateEffect(this, source);
+            }
+        }
+
+        public void handleStack(Item item, int amount, Teamc source) {
+            if (core != null) {
+                core.handleStack(item, amount, source);
             }
         }
 
