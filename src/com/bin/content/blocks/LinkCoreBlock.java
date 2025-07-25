@@ -58,10 +58,6 @@ public class LinkCoreBlock extends Block {
         public Item outputItem = null;
         private CoreBlock.CoreBuild core;
 
-        public LinkCoreBuild() {
-
-        }
-
         @Override
         public void draw() {
             super.draw();
@@ -75,37 +71,32 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public void updateTile() {
+            var outputItem = this.outputItem;
             if (outputItem == null) {
                 return;
             }
-            core = team.core();
-            if (core == null) {
-                return;
+            if (core == null || core.dead()) {
+                core = team.core();
+                if (core == null) {
+                    return;
+                }
             }
             items = core.items;
-            dump(outputItem);
-        }
-
-        public boolean dump(Item todump) {
-            if (todump == null) {
-                return false;
-            }
-            if (this.proximity.size != 0 && core.items.has(todump)) {
+            var proximity = this.proximity;
+            if (proximity.size != 0 && items.has(outputItem)) {
                 int dump = this.cdump;
-                for (int i = 0; i < this.proximity.size; ++i) {
-                    Building other = this.proximity.get((i + dump) % this.proximity.size);
-                    if (other.acceptItem(this, todump) && this.canDump(other, todump)) {
-                        other.handleItem(this, todump);
+                for (int i = 0; i < proximity.size; ++i) {
+                    this.incrementDump(proximity.size);
+                    Building other = proximity.get((i + dump) % proximity.size);
+                    if (other.acceptItem(this, outputItem)) {
+                        other.handleItem(this, outputItem);
                         core.removeStack(outputItem, -1);
-                        this.incrementDump(this.proximity.size);
-                        return true;
+                        return;
                     }
 
-                    this.incrementDump(this.proximity.size);
                 }
 
             }
-            return false;
         }
 
         @Override
