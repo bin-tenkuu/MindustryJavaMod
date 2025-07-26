@@ -29,7 +29,7 @@ public class MyContextList {
             {
                 localizedName = "量子核心连接器";
                 description = "通过量子通道与核心相连,同时装载了装卸器";
-                requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                requirements(Category.effect, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
                 size = 1;
                 health = 320;
             }
