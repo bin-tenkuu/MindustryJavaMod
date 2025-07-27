@@ -71,10 +71,6 @@ public class LinkCoreBlock extends Block {
 
         @Override
         public void updateTile() {
-            var outputItem = this.outputItem;
-            if (outputItem == null) {
-                return;
-            }
             if (core == null || core.dead()) {
                 core = team.core();
                 if (core == null) {
@@ -82,6 +78,10 @@ public class LinkCoreBlock extends Block {
                 }
             }
             items = core.items;
+            var outputItem = this.outputItem;
+            if (outputItem == null) {
+                return;
+            }
             var proximity = this.proximity;
             if (proximity.size != 0 && items.has(outputItem)) {
                 int dump = cdump;
