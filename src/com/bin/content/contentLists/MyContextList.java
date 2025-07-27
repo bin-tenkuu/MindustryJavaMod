@@ -9,7 +9,6 @@ import mindustry.content.Items;
 import mindustry.gen.*;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
-import mindustry.ui.Styles;
 import mindustry.world.Block;
 import mindustry.world.meta.BuildVisibility;
 
@@ -29,7 +28,7 @@ public class MyContextList {
             {
                 localizedName = "量子核心连接器";
                 description = "通过量子通道与核心相连,同时装载了装卸器";
-                requirements(Category.effect, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+                requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
                 size = 1;
                 health = 320;
             }
@@ -42,7 +41,7 @@ public class MyContextList {
                 requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
                 commend = MyContextList::display;
             }
-        };//*/
+        };
         Bin_CommendCall = new CommendBlock("Bin_CommendCall") {
             {
                 localizedName = "召唤器";
@@ -66,18 +65,18 @@ public class MyContextList {
     }
 
     private static void display(Building building, Table table) {
-        table.button(Icon.upOpen, Styles.clearNonei, () ->
+        table.button(Icon.upOpen, () ->
                 Vars.logic.skipWave()
         ).size(50).tooltip("下一波");
-        table.button("跳10波", Icon.warningSmall, Styles.cleart, () -> {
+        table.button(Icon.warningSmall, () -> {
             for (int i = 0; i < 10; i++) {
                 Vars.logic.runWave();
             }
-        }).size(50);
-        table.button(Icon.file, Styles.clearNonei, () ->
+        }).size(50).tooltip("跳10波");
+        table.button(Icon.file, () ->
                 Groups.all.each(Firec.class::isInstance, Entityc::remove)
         ).size(50).tooltip("快速灭火");
-        table.button(Icon.cancel, Styles.clearNonei, () ->
+        table.button(Icon.cancel, () ->
                 Groups.unit.each(Unitc::destroy)
         ).size(50).tooltip("清除所有单位");
         table.row();

@@ -1,5 +1,6 @@
 package com.bin;
 
+import arc.Events;
 import arc.util.Log;
 import com.bin.content.contentLists.MyContextList;
 import com.bin.content.contentLists.MyTechTreeList;
@@ -8,12 +9,7 @@ import mindustry.content.Blocks;
 import mindustry.core.GameState;
 import mindustry.game.EventType;
 import mindustry.game.Rules;
-import mindustry.game.Team;
-import mindustry.type.ItemStack;
-import mindustry.world.Block;
-import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.BuildVisibility;
-import mindustry.world.modules.ItemModule;
 
 /**
  * @author bin
@@ -25,27 +21,9 @@ public class TestMod extends mindustry.mod.Mod {
     public void init() {
         Log.info("加载TestMod init");
 
-        // Events.on(EventType.BlockDestroyEvent.class, TestMod::blockDestroyEvent);
-        // Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
+        Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
 
         Log.info("加载TestMod init完成");
-    }
-
-    private static void blockDestroyEvent(EventType.BlockDestroyEvent e) {
-        Team team = Vars.player.team();
-        if (team != e.tile.team()) {
-            Block block = e.tile.block();
-            ItemModule items = team.items();
-            if (items.length() == 0) {
-                return;
-            }
-            CoreBlock.CoreBuild core = team.core();
-            for (ItemStack stack : block.requirements) {
-                if (core.acceptItem(null, stack.item)) {
-                    core.items.add(stack.item, stack.amount);
-                }
-            }
-        }
     }
 
     private static void changeRule(Object e) {

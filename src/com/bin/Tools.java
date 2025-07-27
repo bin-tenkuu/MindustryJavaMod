@@ -17,7 +17,6 @@ import mindustry.ui.Styles;
  * @author bin
  */
 public final class Tools {
-  public static String ModName = "进攻返利mod";
 
 
   public static <T extends UnlockableContent> void buildItemSelectTable(
