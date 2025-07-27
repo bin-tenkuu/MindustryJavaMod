@@ -84,13 +84,13 @@ public class LinkCoreBlock extends Block {
             items = core.items;
             var proximity = this.proximity;
             if (proximity.size != 0 && items.has(outputItem)) {
-                int dump = this.cdump;
+                int dump = cdump;
                 for (int i = 0; i < proximity.size; ++i) {
-                    this.incrementDump(proximity.size);
+                    incrementDump(proximity.size);
                     Building other = proximity.get((i + dump) % proximity.size);
                     if (other.acceptItem(this, outputItem)) {
                         other.handleItem(this, outputItem);
-                        core.removeStack(outputItem, -1);
+                        core.removeStack(outputItem, 1);
                         return;
                     }
 
