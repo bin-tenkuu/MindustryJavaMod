@@ -26,6 +26,7 @@ public class CommendBlock extends Block {
 
     @Override
     protected void initBuilding() {
+        subclass = CommendBlock.class;
         buildType = CommendBuild::new;
     }
 

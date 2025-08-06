@@ -21,6 +21,8 @@ public class MyTechTreeList {
     }
 
     public static void load() {
-        node(TechTree.roots.first(), MyContextList.Bin_LinkCore);
+        node(TechTree.roots.first(), MyContextList.Bin_LinkCore, (lc) -> {
+            node(lc, MyContextList.Bin_CopyGate);
+        });
     }
 }

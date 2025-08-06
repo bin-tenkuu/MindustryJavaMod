@@ -51,6 +51,7 @@ public class LinkCoreBlock extends Block {
 
     @Override
     protected void initBuilding() {
+        subclass = LinkCoreBlock.class;
         buildType = LinkCoreBuild::new;
     }
 
