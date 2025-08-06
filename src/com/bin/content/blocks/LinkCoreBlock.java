@@ -90,21 +90,24 @@ public class LinkCoreBlock extends Block {
             if (outputItem == null) {
                 return;
             }
-            var proximity = this.proximity;
-            if (proximity.size != 0 && core.items.has(outputItem)) {
-                int dump = cdump;
-                for (int i = 0; i < proximity.size; ++i) {
-                    incrementDump(proximity.size);
-                    Building other = proximity.get((i + dump) % proximity.size);
-                    if (other.acceptItem(this, outputItem)) {
-                        other.handleItem(this, outputItem);
-                        core.removeStack(outputItem, 1);
-                        return;
-                    }
-
+            if (!core.items.has(outputItem)) {
+                return;
+            }
+            for (int i = 0; i < proximity.size; ++i) {
+                incrementDump(proximity.size);
+                Building other = proximity.get(cdump);
+                if (other instanceof CoreBlock.CoreBuild
+                    || other instanceof LinkCoreBuild) {
+                    continue;
+                }
+                if (other.acceptItem(this, outputItem)) {
+                    core.removeStack(outputItem, 1);
+                    other.handleItem(this, outputItem);
+                    return;
                 }
 
             }
+
         }
 
         @Override
@@ -136,18 +139,19 @@ public class LinkCoreBlock extends Block {
                 state.stats.coreItemCount.increment(item);
             }
 
+            final var items = core.items;
             if (net.server() || !net.active()) {
                 if (team == state.rules.defaultTeam && state.isCampaign()) {
                     state.rules.sector.info.handleCoreItem(item, 1);
                 }
 
-                if (core.items.get(item) >= core.storageCapacity) {
+                if (items.get(item) >= core.storageCapacity) {
                     // create item incineration effect at random intervals
                     StorageBlock.incinerateEffect(this, source);
                 } else {
-                    core.items.add(item, 1);
+                    items.add(item, 1);
                 }
-            } else if (((state.rules.coreIncinerates && core.items.get(item) >= core.storageCapacity))) {
+            } else if (((state.rules.coreIncinerates && items.get(item) >= core.storageCapacity))) {
                 // create item incineration effect at random intervals
                 StorageBlock.incinerateEffect(this, source);
             }
