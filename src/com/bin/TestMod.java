@@ -36,7 +36,7 @@ public class TestMod extends mindustry.mod.Mod {
             return;
         }
         rules.coreIncinerates = true;
-        rules.lighting = false;
+        rules.lighting = true;
         rules.staticFog = false;
         rules.fog = false;
         rules.showSpawns = true;
