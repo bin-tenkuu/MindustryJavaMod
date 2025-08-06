@@ -20,6 +20,9 @@ import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
 import mindustry.world.meta.BlockGroup;
 
+import static mindustry.Vars.net;
+import static mindustry.Vars.state;
+
 /**
  * @author bin
  */
@@ -27,7 +30,7 @@ public class LinkCoreBlock extends Block {
 
     public LinkCoreBlock(String name) {
         super(name);
-        hasItems = true;
+        hasItems = false;
         update = true;
         solid = true;
         group = BlockGroup.transportation;
@@ -47,6 +50,11 @@ public class LinkCoreBlock extends Block {
     public int minimapColor(Tile tile) {
         Item item = ((LinkCoreBuild) tile.build).outputItem;
         return item == null ? 0 : item.color.rgba();
+    }
+
+    @Override
+    public boolean outputsItems() {
+        return true;
     }
 
     @Override
@@ -78,13 +86,12 @@ public class LinkCoreBlock extends Block {
                     return;
                 }
             }
-            items = core.items;
             var outputItem = this.outputItem;
             if (outputItem == null) {
                 return;
             }
             var proximity = this.proximity;
-            if (proximity.size != 0 && items.has(outputItem)) {
+            if (proximity.size != 0 && core.items.has(outputItem)) {
                 int dump = cdump;
                 for (int i = 0; i < proximity.size; ++i) {
                     incrementDump(proximity.size);
@@ -124,9 +131,24 @@ public class LinkCoreBlock extends Block {
             if (core == null) {
                 return;
             }
-            if (core.acceptItem(source, item)) {
-                items.add(item, 1);
-            } else {
+
+            if (team == state.rules.defaultTeam) {
+                state.stats.coreItemCount.increment(item);
+            }
+
+            if (net.server() || !net.active()) {
+                if (team == state.rules.defaultTeam && state.isCampaign()) {
+                    state.rules.sector.info.handleCoreItem(item, 1);
+                }
+
+                if (core.items.get(item) >= core.storageCapacity) {
+                    // create item incineration effect at random intervals
+                    StorageBlock.incinerateEffect(this, source);
+                } else {
+                    core.items.add(item, 1);
+                }
+            } else if (((state.rules.coreIncinerates && core.items.get(item) >= core.storageCapacity))) {
+                // create item incineration effect at random intervals
                 StorageBlock.incinerateEffect(this, source);
             }
         }
