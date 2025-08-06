@@ -43,7 +43,10 @@ public class CopyGate extends Block {
         explosivenessScale = 0;
 
         localizedName = "复制器";
-        description = "全新复制科技, 1进3出, 支持液体";
+        description = """
+                全新复制科技
+                [green]物品[]/[blue]液体[]进入时在其他方向同时复制一份
+                """;
         requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
         buildCostMultiplier = 0.1f;
         size = 1;
@@ -114,7 +117,7 @@ public class CopyGate extends Block {
             for (int i = 0; i < this.proximity.size; ++i) {
                 Building other = this.proximity.get(i);
                 other = other.getLiquidDestination(this, liquid);
-                if (other == null || !other.block.hasLiquids || other.liquids == null) {
+                if (other == source || other == null || !other.block.hasLiquids || other.liquids == null) {
                     continue;
                 }
                 if (other.acceptLiquid(this, liquid)) {
@@ -134,12 +137,12 @@ public class CopyGate extends Block {
             for (int i = 0; i < this.proximity.size; ++i) {
                 Building other = this.proximity.get(i);
                 other = other.getLiquidDestination(this, liquid);
-                if (other == null || !other.block.hasLiquids || other.liquids == null) {
+                if (other == source || other == null || !other.block.hasLiquids || other.liquids == null) {
                     continue;
                 }
                 if (other.acceptLiquid(this, liquid)) {
                     final var flow = Math.min(amount, other.block.liquidCapacity - other.liquids.get(liquid));
-                    if (flow < 1E-4F) {
+                    if (flow >= 1E-4F) {
                         other.handleLiquid(this, liquid, flow);
                     }
                 }

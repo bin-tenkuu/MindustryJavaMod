@@ -12,12 +12,12 @@ main: "com.bin.TestMod"
 
 #the mod description as seen in the mod dialog
 description:'''
-建筑:核心连接,跳波灭火,单位召唤
+建筑:核心连接,复制器,跳波灭火,单位召唤
 解锁:源
 '''
 
 #the mod version
-version: 2.3
+version: 3.0
 
 #the minimum game build required to run this mod
 minGameVersion: 150
