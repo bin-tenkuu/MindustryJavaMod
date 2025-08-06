@@ -1,9 +1,15 @@
 package com.bin.content.blocks;
 
+import mindustry.content.Items;
 import mindustry.gen.Building;
+import mindustry.type.Category;
 import mindustry.type.Item;
+import mindustry.type.ItemStack;
+import mindustry.type.Liquid;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
+import mindustry.world.meta.BuildVisibility;
+import mindustry.world.meta.Env;
 
 /**
  * @author bin
@@ -11,17 +17,37 @@ import mindustry.world.meta.BlockGroup;
  */
 public class CopyGate extends Block {
 
-    public CopyGate(String name) {
-        super(name);
+    public CopyGate() {
+        super("Bin_CopyGate");
         hasItems = true;
+        hasLiquids = true;
+
+        update = true;
+        solid = true;
+        group = BlockGroup.projectors;
+        outputsLiquid = true;
+
+        itemCapacity = 0;
+        liquidCapacity = 120f;
+
+        envEnabled = Env.any;
+
         underBullets = true;
-        update = false;
         destructible = true;
-        group = BlockGroup.transportation;
         instantTransfer = true;
         unloadable = false;
         canOverdrive = false;
-        itemCapacity = 0;
+        researchCostMultiplier = 1f;
+        noUpdateDisabled = true;
+        floating = true;
+        explosivenessScale = 0;
+
+        localizedName = "复制器";
+        description = "全新复制科技, 1进3出, 支持液体";
+        requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+        buildCostMultiplier = 0.1f;
+        size = 1;
+        health = 320;
     }
 
     @Override
@@ -71,6 +97,22 @@ public class CopyGate extends Block {
                     other.handleItem(this, item);
                 }
             }
+        }
+
+        @Override
+        public boolean acceptLiquid(Building source, Liquid liquid) {
+            if (source == null || liquid == null || source instanceof CopyGateBuild) {
+                return false;
+            }
+            return source.acceptLiquid(source, liquid);
+        }
+
+        @Override
+        public void handleLiquid(Building source, Liquid liquid, float amount) {
+            if (source == null || liquid == null || amount <= 1.0E-4F || source instanceof CopyGateBuild) {
+                return;
+            }
+            source.handleLiquid(source, liquid, amount);
         }
 
     }

@@ -2,8 +2,11 @@ package com.bin.content.blocks;
 
 import arc.scene.ui.layout.Table;
 import mindustry.gen.Building;
+import mindustry.type.Category;
+import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
+import mindustry.world.meta.BuildVisibility;
 
 import java.util.function.BiConsumer;
 
@@ -22,6 +25,9 @@ public class CommendBlock extends Block {
         configurable = true;
         group = BlockGroup.transportation;
         alwaysUnlocked = true;
+
+        size = 2;
+        requirements(Category.effect, BuildVisibility.shown, ItemStack.empty);
     }
 
     @Override

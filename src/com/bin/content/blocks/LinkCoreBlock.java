@@ -11,14 +11,18 @@ import arc.util.io.Reads;
 import arc.util.io.Writes;
 import com.bin.Tools;
 import mindustry.Vars;
+import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.gen.Teamc;
+import mindustry.type.Category;
 import mindustry.type.Item;
+import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
 import mindustry.world.meta.BlockGroup;
+import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.Vars.net;
 import static mindustry.Vars.state;
@@ -28,16 +32,25 @@ import static mindustry.Vars.state;
  */
 public class LinkCoreBlock extends Block {
 
-    public LinkCoreBlock(String name) {
-        super(name);
+    public LinkCoreBlock() {
+        super("Bin_LinkCore");
         hasItems = false;
         update = true;
         solid = true;
         group = BlockGroup.transportation;
         configurable = true;
+        underBullets = true;
         noUpdateDisabled = true;
+        researchCostMultiplier = 1f;
         config(Item.class, (LinkCoreBuild tile, Item item) -> tile.outputItem = item);
         configClear((LinkCoreBuild tile) -> tile.outputItem = null);
+
+        localizedName = "量子核心连接器";
+        description = "通过量子通道与核心相连,同时装载了装卸器";
+        requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
+        buildCostMultiplier = 0.1f;
+        size = 1;
+        health = 320;
     }
 
     @Override
