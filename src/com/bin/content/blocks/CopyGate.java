@@ -58,7 +58,7 @@ public class CopyGate extends Block {
         @Override
         public void handleItem(Building source, Item item) {
             if (team != source.team || item == null) {
-                return ;
+                return;
             }
 
             for (int i = 0; i < proximity.size; i++) {
@@ -66,7 +66,10 @@ public class CopyGate extends Block {
                 if (other == source || other == this) {
                     continue;
                 }
-                other.handleItem(this, item);
+
+                if (other.acceptItem(this, item)) {
+                    other.handleItem(this, item);
+                }
             }
         }
 

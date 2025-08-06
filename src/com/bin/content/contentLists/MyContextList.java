@@ -24,7 +24,7 @@ public class MyContextList {
             localizedName = "量子核心连接器";
             description = "通过量子通道与核心相连,同时装载了装卸器";
             requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-            buildCostMultiplier = 4f;
+            buildCostMultiplier = 0.1f;
             size = 1;
             health = 320;
         }
@@ -34,7 +34,7 @@ public class MyContextList {
             localizedName = "复制门";
             description = "全新复制科技，1进3出";
             requirements(Category.distribution, BuildVisibility.shown, ItemStack.with(Items.copper, 50));
-            buildCostMultiplier = 4f;
+            buildCostMultiplier = 0.1f;
             size = 1;
             health = 320;
         }
