@@ -20,7 +20,6 @@ public class CopyGate extends Block {
     public CopyGate() {
         super("Bin_CopyGate");
         hasItems = true;
-        hasLiquids = true;
 
         update = true;
         solid = true;
@@ -70,7 +69,7 @@ public class CopyGate extends Block {
         buildType = CopyGateBuild::new;
     }
 
-    public static class CopyGateBuild extends Building {
+    public class CopyGateBuild extends Building {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
@@ -78,8 +77,8 @@ public class CopyGate extends Block {
                 return false;
             }
 
-            for (int i = 0; i < proximity.size; i++) {
-                Building other = proximity.get(i);
+            for (var i = 0; i < proximity.size; i++) {
+                var other = proximity.get(i);
                 if (other == source || other == this) {
                     continue;
                 }
@@ -96,8 +95,8 @@ public class CopyGate extends Block {
                 return;
             }
 
-            for (int i = 0; i < proximity.size; i++) {
-                Building other = proximity.get(i);
+            for (var i = 0; i < proximity.size; i++) {
+                var other = proximity.get(i);
                 if (other == source || other == this) {
                     continue;
                 }
@@ -109,44 +108,32 @@ public class CopyGate extends Block {
         }
 
         @Override
-        public boolean acceptLiquid(Building source, Liquid liquid) {
-            if (source == null || team != source.team || liquid == null || source instanceof CopyGateBuild) {
-                return false;
-            }
-
-            for (int i = 0; i < this.proximity.size; ++i) {
-                Building other = this.proximity.get(i);
-                other = other.getLiquidDestination(this, liquid);
-                if (other == source || other == null || !other.block.hasLiquids || other.liquids == null) {
+        public void updateTile() {
+            for (var i = 0; i < this.proximity.size; ++i) {
+                var other = this.proximity.get(i);
+                if (other == null || !other.block.hasLiquids) {
                     continue;
                 }
+                var liquids = other.liquids;
+                if (liquids == null || liquids.currentAmount() <= 1E-4F) {
+                    continue;
+                }
+                var liquid = liquids.current();
+                other = other.getLiquidDestination(this, liquid);
+                if (other == null) {
+                    continue;
+                }
+                liquids = other.liquids;
                 if (other.acceptLiquid(this, liquid)) {
-                    return true;
+                    var flow = Math.min(liquidCapacity, other.block.liquidCapacity - liquids.get(liquid));
+                    other.handleLiquid(this, liquid, flow);
                 }
             }
-
-            return source.acceptLiquid(this, liquid);
         }
 
         @Override
-        public void handleLiquid(Building source, Liquid liquid, float amount) {
-            if (source == null || team != source.team || liquid == null || source instanceof CopyGateBuild) {
-                return;
-            }
-
-            for (int i = 0; i < this.proximity.size; ++i) {
-                Building other = this.proximity.get(i);
-                other = other.getLiquidDestination(this, liquid);
-                if (other == source || other == null || !other.block.hasLiquids || other.liquids == null) {
-                    continue;
-                }
-                if (other.acceptLiquid(this, liquid)) {
-                    final var flow = Math.min(amount, other.block.liquidCapacity - other.liquids.get(liquid));
-                    if (flow >= 1E-4F) {
-                        other.handleLiquid(this, liquid, flow);
-                    }
-                }
-            }
+        public boolean acceptLiquid(Building source, Liquid liquid) {
+            return false;
         }
 
     }

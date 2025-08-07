@@ -152,7 +152,7 @@ public class LinkCoreBlock extends Block {
                 state.stats.coreItemCount.increment(item);
             }
 
-            final var items = core.items;
+            var items = core.items;
             if (net.server() || !net.active()) {
                 if (team == state.rules.defaultTeam && state.isCampaign()) {
                     state.rules.sector.info.handleCoreItem(item, 1);
