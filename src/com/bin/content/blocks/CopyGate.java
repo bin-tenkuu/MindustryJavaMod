@@ -126,6 +126,9 @@ public class CopyGate extends Block {
                 liquids = other.liquids;
                 if (other.acceptLiquid(this, liquid)) {
                     var flow = Math.min(liquidCapacity, other.block.liquidCapacity - liquids.get(liquid));
+                    if (flow <= 1E-4F) {
+                        continue;
+                    }
                     other.handleLiquid(this, liquid, flow);
                 }
             }
