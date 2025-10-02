@@ -21,7 +21,7 @@ public class TestMod extends mindustry.mod.Mod {
     public void init() {
         Log.info("加载TestMod init");
 
-        Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
+        // Events.on(EventType.WorldLoadEvent.class, TestMod::changeRule);
 
         Log.info("加载TestMod init完成");
     }
